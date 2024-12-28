@@ -13,11 +13,11 @@
             <Font size="16.0" />
          </font></Label>
       <ListView fx:id="examplesListView" editable="true" layoutX="2.0" layoutY="150.0" prefHeight="395.0" prefWidth="815.0" />
-      <Button fx:id="runButton" layoutX="604.0" layoutY="52.0" mnemonicParsing="false" onAction="#run" prefHeight="26.0" prefWidth="168.0" text="RUN">
+      <Button fx:id="runButton" layoutX="604.0" layoutY="52.0" mnemonicParsing="false" onAction="#run" prefHeight="26.0" prefWidth="168.0" text="Run">
          <font>
             <Font size="14.0" />
          </font></Button>
-      <Button fx:id="exitButton" layoutX="657.0" layoutY="107.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="62.0" text="EXIT">
+      <Button fx:id="exitButton" layoutX="657.0" layoutY="107.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="62.0" text="Exit">
          <font>
             <Font size="14.0" />
          </font></Button>
