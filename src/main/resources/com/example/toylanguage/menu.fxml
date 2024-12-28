@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="menuScene" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="545.0" prefWidth="818.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toylanguage.ControllerMenu">
+   <children>
+      <Label fx:id="currentExample" alignment="CENTER" layoutX="22.0" layoutY="14.0" prefHeight="130.0" prefWidth="542.0" text="Select an example" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <ListView fx:id="examplesListView" editable="true" layoutX="2.0" layoutY="150.0" prefHeight="395.0" prefWidth="815.0" />
+      <Button fx:id="runButton" layoutX="604.0" layoutY="52.0" mnemonicParsing="false" onAction="#run" prefHeight="26.0" prefWidth="168.0" text="RUN">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+      <Button fx:id="exitButton" layoutX="657.0" layoutY="107.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="62.0" text="EXIT">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+   </children>
+</AnchorPane>
