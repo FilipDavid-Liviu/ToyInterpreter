@@ -25,9 +25,9 @@ public class ControllerRun {
     public ListView<String> executionListView;
     public Label idLabel;
     public TableColumn<KeyValuePair, String> addressColumn;
-    public TableColumn<KeyValuePair,String> heapValueColumn;
-    public TableColumn<KeyValuePair,String> variableColumn;
-    public TableColumn<KeyValuePair,String> symbolValueColumn;
+    public TableColumn<KeyValuePair, String> heapValueColumn;
+    public TableColumn<KeyValuePair, String> variableColumn;
+    public TableColumn<KeyValuePair, String> symbolValueColumn;
     public TableView<KeyValuePair> heapTableView;
     public TableView<KeyValuePair> symbolTableView;
     public Button exitButton;
