@@ -1,4 +1,4 @@
-package com.example.toylanguage;
+package gui;
 
 import controller.Controller;
 import javafx.collections.FXCollections;
@@ -50,7 +50,7 @@ public class ControllerRun {
         heapValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         addressColumn.setCellFactory(this::createWrappingCellFactory);
         heapValueColumn.setCellFactory(this::createWrappingCellFactory);
-        idsListView.getSelectionModel().selectedItemProperty().addListener(((observableValue, s, t1) -> {
+        idsListView.getSelectionModel().selectedItemProperty().addListener(((_, _, _) -> {
             currentId = idsListView.getSelectionModel().getSelectedItem();
             if (currentId == null) {
                 idLabel.setText("Current ID Selected: ");

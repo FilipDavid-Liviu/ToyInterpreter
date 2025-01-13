@@ -1,9 +1,7 @@
-package com.example.toylanguage;
+package gui;
 
 
 import controller.Controller;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,11 +34,7 @@ import java.util.ResourceBundle;
 
 public class ControllerMenu implements Initializable {
     @FXML
-    private AnchorPane menuScene;
-    @FXML
     private ListView<String> examplesListView;
-    @FXML
-    private Button runButton;
     @FXML
     private Button exitButton;
     @FXML
@@ -167,7 +161,7 @@ public class ControllerMenu implements Initializable {
             examplesListView.getItems().add(example.toString());
         }
 
-        examplesListView.getSelectionModel().selectedItemProperty().addListener(((observableValue, s, t1) -> {
+        examplesListView.getSelectionModel().selectedItemProperty().addListener(((_, _, _) -> {
             currentExampleText = examplesListView.getSelectionModel().getSelectedItem();
             currentExample.setText(currentExampleText);
         }));

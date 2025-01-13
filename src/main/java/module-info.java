@@ -4,8 +4,8 @@ module com.example.toylanguage {
     requires javafx.graphics;
 
 
-    opens com.example.toylanguage to javafx.fxml;
-    exports com.example.toylanguage;
+    opens gui to javafx.fxml;
+    exports gui;
     exports model.adt;
     opens model.adt to javafx.fxml;
 }

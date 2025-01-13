@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="menuScene" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="545.0" prefWidth="818.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toylanguage.ControllerMenu">
+<AnchorPane fx:id="menuScene" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="545.0" prefWidth="818.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ControllerMenu">
    <children>
       <Label fx:id="currentExample" alignment="CENTER" layoutX="22.0" layoutY="14.0" prefHeight="130.0" prefWidth="542.0" text="Select an example" textAlignment="CENTER" wrapText="true">
          <font>
