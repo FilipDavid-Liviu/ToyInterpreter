@@ -42,38 +42,29 @@ public class SemaphoreTable implements ISemaphoreTable {
 
     @Override
     public boolean acquire(String key, Integer id) {
-        if (this.isDefined(key)) {
-            Pair<Integer, List<Integer>> pair = this.table.lookUp(key);
-            List<Integer> list = pair.getSecond();
-            if (list.contains(id)) {
-                throw new SemaphoreException(1, key, id);
+        Pair<Integer, List<Integer>> pair = this.table.lookUp(key);
+        List<Integer> list = pair.getSecond();
+        //if (list.contains(id))
+        //    throw new SemaphoreException(1, key, id);
+        //else {
+            if (pair.getFirst() > list.size()) {
+                list.add(id);
+                return true;
             } else {
-                if (pair.getFirst() > list.size()) {
-                    list.add(id);
-                    return true;
-                } else {
-                    return false;
-                }
+                return false;
             }
-        } else {
-            throw new SemaphoreException(2, key);
-        }
+        //}
     }
 
     @Override
     public void release(String key, Integer id) {
-        if (this.isDefined(key)) {
-            Pair<Integer, List<Integer>> pair = this.table.lookUp(key);
-            List<Integer> list = pair.getSecond();
-            if (list.contains(id)) {
-                list.remove(id);
-            } else {
-                throw new SemaphoreException(2, key, id);
-            }
+        Pair<Integer, List<Integer>> pair = this.table.lookUp(key);
+        List<Integer> list = pair.getSecond();
+        if (list.contains(id)) {
+            list.remove(id);
         } else {
-            throw new SemaphoreException(2, key);
+            throw new SemaphoreException(2, key, id);
         }
-
     }
 
     @Override

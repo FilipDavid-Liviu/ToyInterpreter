@@ -2,7 +2,6 @@ package view;
 
 import controller.Controller;
 import model.ProgramState;
-import model.adt.Pair;
 import model.dt.*;
 import model.exceptions.StackEmptyException;
 import model.expressions.*;
@@ -17,7 +16,7 @@ import view.commands.RunExample;
 public class Interpreter {
 
     public static void main(String[] args){
-        Statement ex2 = new CompoundStatement(new NewSemaphoreStatement("s", new ValueExpression(new StringValue("a"))), new SleepStatement(3));
+        Statement ex2 = new CompoundStatement(new NewSemaphoreStatement("s", new ValueExpression(new IntegerValue(2))), new NewSemaphoreStatement("s1", new ValueExpression(new IntegerValue(2))));
 
         TextMenu menu = new TextMenu();
         addCommand(menu, "2", ex2);
