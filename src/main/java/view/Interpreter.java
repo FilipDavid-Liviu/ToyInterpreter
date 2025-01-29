@@ -6,7 +6,7 @@ import model.dt.*;
 import model.exceptions.StackEmptyException;
 import model.expressions.*;
 import model.statements.*;
-import model.statements.semaphore.NewSemaphoreStatement;
+import model.statements.semaphore.*;
 import model.types.*;
 import model.values.*;
 import repository.*;
@@ -16,10 +16,22 @@ import view.commands.RunExample;
 public class Interpreter {
 
     public static void main(String[] args){
-        Statement ex2 = new CompoundStatement(new NewSemaphoreStatement("s", new ValueExpression(new IntegerValue(2))), new NewSemaphoreStatement("s1", new ValueExpression(new IntegerValue(2))));
+        //int v; v=2; newSemaphore(s, v-1); fork(v=v+1; print(v); acquire(s); print(v); release(s)); fork(v=v+1; print(v); acquire(s); print(v); release(s)); fork(v=v+1; print(v); acquire(s); print(v); release(s)); acquire(s); print(v); release(s);
+        Statement ex1 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
+                new CompoundStatement(new NewSemaphoreStatement("s", new ArithmeticExpression("-", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))),
+                        new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))),
+                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
+                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s"))))),
+                                new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))),
+                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
+                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s"))))),
+                                        new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))),
+                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
+                                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s"))))),
+                                                new CompoundStatement(new AcquireStatement("s"), new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))))))));
 
         TextMenu menu = new TextMenu();
-        addCommand(menu, "2", ex2);
+        addCommand(menu, "2", ex1);
         menu.addCommand(new ExitCommand("0", "exit"));
         menu.show();
     }
