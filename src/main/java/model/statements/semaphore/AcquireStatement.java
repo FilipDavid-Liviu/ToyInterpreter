@@ -23,11 +23,14 @@ public class AcquireStatement implements Statement {
     public ProgramState execute(ProgramState state) {
         lock.lock();
         ISemaphoreTable semaphoreTable = state.getSemaphoreTable();
-        if (!semaphoreTable.isDefined(this.id))
+        if (!semaphoreTable.isDefined(this.id)){
+            lock.unlock();
             throw new SemaphoreException(2, this.id);
+        }
         Pair<Integer, List<Integer>> pair = semaphoreTable.lookUp(this.id);
         List<Integer> list = pair.getSecond();
         if (list.contains(state.getId())) {
+            lock.unlock();
             throw new SemaphoreException(1, this.id, state.getId());
         }
         else {

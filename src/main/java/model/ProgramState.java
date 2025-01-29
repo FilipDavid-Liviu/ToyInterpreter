@@ -79,7 +79,7 @@ public class ProgramState {
     }
 
     public String toStringRest() {
-        return this.heap.toString() + "\n" + this.output.toString() + "\n" + this.fileTable.toString() + "\n\n";
+        return this.heap.toString() + "\n" + this.output.toString() + "\n" + this.fileTable.toString() + "\n" + this.semaphoreTable.toString() + "\n\n";
     }
 
     public boolean isNotCompleted() {

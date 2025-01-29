@@ -28,6 +28,7 @@ public class ReleaseStatement implements Statement {
         Pair<Integer, List<Integer>> pair = semaphoreTable.lookUp(this.id);
         List<Integer> list = pair.getSecond();
         if (!list.contains(state.getId())) {
+            lock.unlock();
             throw new SemaphoreException(2, this.id, state.getId());
         }
         else semaphoreTable.release(this.id, state.getId());

@@ -31,6 +31,9 @@ public class ControllerRun {
     public TableView<KeyValuePair> heapTableView;
     public TableView<KeyValuePair> symbolTableView;
     public Button exitButton;
+    public TableColumn<KeyValuePair, String> semaphoreIdColumn;
+    public TableColumn<KeyValuePair, String> semaphorePermitsColumn;
+    public TableView<KeyValuePair> semaphoreTableView;
 
 
     private Controller controller;
@@ -50,6 +53,12 @@ public class ControllerRun {
         heapValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         addressColumn.setCellFactory(this::createWrappingCellFactory);
         heapValueColumn.setCellFactory(this::createWrappingCellFactory);
+
+        semaphoreIdColumn.setCellValueFactory(new PropertyValueFactory<>("key"));
+        semaphorePermitsColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        semaphoreIdColumn.setCellFactory(this::createWrappingCellFactory);
+        semaphorePermitsColumn.setCellFactory(this::createWrappingCellFactory);
+
         idsListView.getSelectionModel().selectedItemProperty().addListener(((_, _, _) -> {
             currentId = idsListView.getSelectionModel().getSelectedItem();
             if (currentId == null) {
@@ -102,6 +111,13 @@ public class ControllerRun {
                         .map(e -> new KeyValuePair(String.valueOf(e), commonProgram.getHeap().getData().lookUp(e).toString()))
                         .toList());
         heapTableView.setItems(heapItems);
+
+        ObservableList<KeyValuePair> semaphoreItems = FXCollections.observableArrayList(
+                commonProgram.getSemaphoreTable().getData().getKeys()
+                        .stream()
+                        .map(e -> new KeyValuePair(String.valueOf(e), commonProgram.getSemaphoreTable().getData().lookUp(e).toString()))
+                        .toList());
+        semaphoreTableView.setItems(semaphoreItems);
 
         populateById(currentId);
     }

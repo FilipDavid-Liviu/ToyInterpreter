@@ -18,20 +18,18 @@ public class Interpreter {
     public static void main(String[] args){
         //int v; v=2; newSemaphore(s, v-1); fork(v=v+1; print(v); acquire(s); print(v); release(s)); fork(v=v+1; print(v); acquire(s); print(v); release(s)); fork(v=v+1; print(v); acquire(s); print(v); release(s)); acquire(s); print(v); release(s);
         Statement ex1 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
-                new CompoundStatement(new NewSemaphoreStatement("s", new ArithmeticExpression("-", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))),
-                        new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))),
+                new CompoundStatement(new NewSemaphoreStatement("s", new ArithmeticExpression("-", new VariableExpression("v"), new ValueExpression(new IntegerValue(0)))),
+                        new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(3)))),
                                 new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
-                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s"))))),
-                                new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))),
+                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))),
+                                new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(4)))),
                                         new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
-                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s"))))),
-                                        new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))),
-                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
-                                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s"))))),
-                                                new CompoundStatement(new AcquireStatement("s"), new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))))))));
+                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))), new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1)))),
+                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
+                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))), new CompoundStatement(new AcquireStatement("s"), new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))))));
 
         TextMenu menu = new TextMenu();
-        addCommand(menu, "2", ex1);
+        addCommand(menu, "1", ex1);
         menu.addCommand(new ExitCommand("0", "exit"));
         menu.show();
     }

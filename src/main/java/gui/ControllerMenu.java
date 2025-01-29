@@ -17,6 +17,9 @@ import model.ProgramState;
 import model.dt.*;
 import model.expressions.*;
 import model.statements.*;
+import model.statements.semaphore.AcquireStatement;
+import model.statements.semaphore.NewSemaphoreStatement;
+import model.statements.semaphore.ReleaseStatement;
 import model.types.BooleanType;
 import model.types.IntegerType;
 import model.types.ReferenceType;
@@ -109,6 +112,17 @@ public class ControllerMenu implements Initializable {
                 new CompoundStatement(new VariableDeclarationStatement("a", new IntegerType()), new CompoundStatement(new AssignStatement("a", new ValueExpression(new IntegerValue(2))),
                         new CompoundStatement(new SwapStatement("v", "a"), new PrintStatement(new VariableExpression("v")))))));
 
+        Statement ex16 =  new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
+                new CompoundStatement(new NewSemaphoreStatement("s", new ArithmeticExpression("-", new VariableExpression("v"), new ValueExpression(new IntegerValue(0)))),
+                        new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(3)))),
+                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
+                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))),
+                                new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(4)))),
+                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
+                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))), new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1)))),
+                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
+                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))), new CompoundStatement(new AcquireStatement("s"), new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))))));
+
         examples.add(ex1);
         examples.add(ex2);
         examples.add(ex3);
@@ -124,6 +138,7 @@ public class ControllerMenu implements Initializable {
         examples.add(ex13);
         examples.add(ex14);
         examples.add(ex15);
+        examples.add(ex16);
 
     }
 
@@ -192,7 +207,7 @@ public class ControllerMenu implements Initializable {
         try {
             Integer id = searchExample(currentExampleText);
             if (id != null) {
-                FXMLLoader fxmlLoader = new FXMLLoader(ToyGUI.class.getResource("run.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(ToyGUI.class.getResource("run2.fxml"));
                 Scene scene = new Scene(fxmlLoader.load());
                 scene.getStylesheets().add("file:src/main/styles.css");
                 ControllerRun controllerRun = fxmlLoader.getController();
