@@ -62,4 +62,11 @@ public class ExecutionStack implements IExecutionStack {
         }
         return list;
     }
+
+    @Override
+    public void clear() {
+        while (!stack.isEmpty()) {
+            stack.pop();
+        }
+    }
 }

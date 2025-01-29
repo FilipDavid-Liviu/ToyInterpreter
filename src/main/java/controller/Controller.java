@@ -21,7 +21,7 @@ public class Controller {
 
         this.repo.cleanFile();
         if (this.display_flag) {
-            this.repo.getProgramList().forEach(program -> System.out.println(program.toString() + "\n"));
+            //this.repo.getProgramList().forEach(program -> System.out.println(program.toString() + "\n"));
         }
         this.repo.getProgramList().forEach(e -> this.repo.logProgramState(e));
         executor = Executors.newFixedThreadPool(5);

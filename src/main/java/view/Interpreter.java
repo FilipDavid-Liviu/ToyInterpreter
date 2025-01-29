@@ -2,10 +2,12 @@ package view;
 
 import controller.Controller;
 import model.ProgramState;
+import model.adt.Pair;
 import model.dt.*;
 import model.exceptions.StackEmptyException;
 import model.expressions.*;
 import model.statements.*;
+import model.statements.semaphore.NewSemaphoreStatement;
 import model.types.*;
 import model.values.*;
 import repository.*;
@@ -14,7 +16,16 @@ import view.commands.RunExample;
 
 public class Interpreter {
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
+        Statement ex2 = new CompoundStatement(new NewSemaphoreStatement("s", new ValueExpression(new StringValue("a"))), new SleepStatement(3));
+
+        TextMenu menu = new TextMenu();
+        addCommand(menu, "2", ex2);
+        menu.addCommand(new ExitCommand("0", "exit"));
+        menu.show();
+    }
+
+    public static void main3(String[] args) {
         Statement ex1 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
                 new PrintStatement(new VariableExpression("v"))));
         //Controller ctr1 = initController("1", ex1);
@@ -138,6 +149,8 @@ public class Interpreter {
 //        menu.addCommand(new RunExample("15", ex15.toString(), ctr15));
         menu.show();
     }
+
+
 
     private static Controller initController(String id, Statement ex){
         IExecutionStack stack = new ExecutionStack();

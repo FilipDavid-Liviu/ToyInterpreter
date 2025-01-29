@@ -14,4 +14,5 @@ public interface IExecutionStack {
     IExecutionStack deepCopy();
     IMyStack<Statement> getData();
     List<Statement> getAllInList();
+    void clear();
 }

@@ -12,7 +12,7 @@ public class SleepStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) {
-        if (number > 0) {
+        if (number > 1) {
             state.getExecutionStack().push(new SleepStatement(number - 1));
         }
         return null;

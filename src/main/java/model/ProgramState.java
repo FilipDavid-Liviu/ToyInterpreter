@@ -15,6 +15,7 @@ public class ProgramState {
     private IOutput output;
     private IFileTable fileTable;
     private IHeap heap;
+    private ISemaphoreTable semaphoreTable;
 
     public int getId() {
         return id;
@@ -40,6 +41,10 @@ public class ProgramState {
         return fileTable;
     }
 
+    public ISemaphoreTable getSemaphoreTable() {
+        return semaphoreTable;
+    }
+
 
     public ProgramState(IExecutionStack execStack, ISymbolTable symbolTable, IHeap heap, IOutput output, IFileTable fileTable, Statement program) {
         this.id = generateId();
@@ -48,13 +53,25 @@ public class ProgramState {
         this.heap = heap;
         this.output = output;
         this.fileTable = fileTable;
+        this.semaphoreTable = new SemaphoreTable();
+        this.execStack.push(program);
+    }
+
+    public ProgramState(IExecutionStack execStack, ISymbolTable symbolTable, IHeap heap, IOutput output, IFileTable fileTable, ISemaphoreTable semaphoreTable, Statement program) {
+        this.id = generateId();
+        this.execStack = execStack;
+        this.symbolTable = symbolTable;
+        this.heap = heap;
+        this.output = output;
+        this.fileTable = fileTable;
+        this.semaphoreTable = semaphoreTable;
         this.execStack.push(program);
     }
 
     @Override
     public String toString() {
         return "ID: " + id + "\n" +this.execStack.toString() + "\n" + this.symbolTable.toString() + "\n" + this.heap.toString() + "\n" +
-                this.output.toString() + "\n" + this.fileTable.toString() + "\n\n";
+                this.output.toString() + "\n" + this.fileTable.toString() + "\n" + this.semaphoreTable.toString() + "\n\n";
     }
 
     public String toStringExecSym() {
@@ -77,6 +94,7 @@ public class ProgramState {
             return currentStatement.execute(this);
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            this.execStack.clear();
             return null;
         }
     }
