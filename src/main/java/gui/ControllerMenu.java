@@ -125,6 +125,9 @@ public class ControllerMenu implements Initializable {
         Statement ex17 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new ConditionalAssignmentStatement("v", new BinaryExpression("==", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))), new ValueExpression(new IntegerValue(99)), new ValueExpression(new IntegerValue(77))),
                 new PrintStatement(new VariableExpression("v"))));
 
+        Statement ex18 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new ForStatement("a", new ValueExpression(new IntegerValue(0)), new ValueExpression(new IntegerValue(3)), new BinaryExpression("+", new VariableExpression("a"), new ValueExpression(new IntegerValue(1))), new PrintStatement(new VariableExpression("v"))), new PrintStatement(new VariableExpression("a"))));
+
+
         examples.add(ex1);
         examples.add(ex2);
         examples.add(ex3);
@@ -142,6 +145,7 @@ public class ControllerMenu implements Initializable {
         examples.add(ex15);
         examples.add(ex16);
         examples.add(ex17);
+        examples.add(ex18);
 
     }
 
