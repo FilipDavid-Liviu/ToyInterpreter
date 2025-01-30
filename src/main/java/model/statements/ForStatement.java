@@ -4,7 +4,6 @@ import model.ProgramState;
 import model.dt.TypeDictionary;
 import model.exceptions.ArithmeticRelationalExpressionException;
 import model.exceptions.AssignException;
-import model.exceptions.InvalidOperationException;
 import model.expressions.Expression;
 import model.expressions.RelationalExpression;
 import model.expressions.VariableExpression;
