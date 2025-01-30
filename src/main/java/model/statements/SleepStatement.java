@@ -4,7 +4,7 @@ import model.ProgramState;
 import model.dt.TypeDictionary;
 
 public class SleepStatement implements Statement {
-    private int number;
+    private final int number;
 
     public SleepStatement(int number) {
         this.number = number;

@@ -10,9 +10,7 @@ import model.types.StringType;
 import model.values.StringValue;
 import model.values.Value;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 public class OpenFileStatement implements Statement {
     Expression expression;
@@ -32,7 +30,7 @@ public class OpenFileStatement implements Statement {
             throw new FileException(2);
         }
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(((StringValue) value).getValue()));
+            //BufferedReader reader = new BufferedReader(new FileReader(((StringValue) value).getValue()));
             state.getFileTable().openFile(((StringValue) value));
         } catch (FileNotFoundException e) {
             throw new MyFileNotFoundException(((StringValue) value).getValue());

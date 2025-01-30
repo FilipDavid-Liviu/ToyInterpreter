@@ -10,11 +10,11 @@ import model.expressions.VariableExpression;
 import model.types.IntegerType;
 
 public class ForStatement implements Statement{
-    private String id;
-    private Expression exp1;
-    private Expression exp2;
-    private Expression exp3;
-    private Statement statement;
+    private final String id;
+    private final Expression exp1;
+    private final Expression exp2;
+    private final Expression exp3;
+    private final Statement statement;
 
     public ForStatement(String id, Expression exp1, Expression exp2, Expression exp3, Statement statement) {
         this.id = id;

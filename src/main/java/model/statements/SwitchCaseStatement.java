@@ -10,9 +10,9 @@ import model.types.Type;
 import model.values.Value;
 
 public class SwitchCaseStatement implements Statement {
-    private Expression switchExpression;
-    private Statement defaultStatement;
-    private CaseStatement[] caseStatements;
+    private final Expression switchExpression;
+    private final Statement defaultStatement;
+    private final CaseStatement[] caseStatements;
 
     public SwitchCaseStatement(Expression switchExpression, Statement defaultStatement, CaseStatement[] caseStatements){
         this.switchExpression = switchExpression;
@@ -51,7 +51,7 @@ public class SwitchCaseStatement implements Statement {
     public String toString(){
         StringBuilder str = new StringBuilder("switch(" + this.switchExpression.toString() + ") {");
         for (CaseStatement caseStatement : caseStatements) {
-            str.append("case ").append(caseStatement.getExpression().toString()).append(": ").append(caseStatement.getStatement().toString()).append(" ");
+            str.append("case (").append(caseStatement.getExpression().toString()).append("): ").append(caseStatement.getStatement().toString()).append("; ");
         }
         str.append("default: ").append(defaultStatement.toString()).append("}");
         return str.toString();

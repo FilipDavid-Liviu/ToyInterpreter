@@ -8,10 +8,10 @@ import model.types.BooleanType;
 import model.values.Value;
 
 public class ForLoopStatement implements Statement {
-    private Statement initialization;
-    private Expression condition;
-    private Statement step;
-    private Statement body;
+    private final Statement initialization;
+    private final Expression condition;
+    private final Statement step;
+    private final Statement body;
 
     public ForLoopStatement(Statement initialization, Expression condition, Statement step, Statement body) {
         this.initialization = initialization;

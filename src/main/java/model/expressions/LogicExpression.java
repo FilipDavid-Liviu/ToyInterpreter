@@ -10,9 +10,9 @@ import model.values.BooleanValue;
 import model.values.Value;
 
 public class LogicExpression implements Expression {
-    private Expression left;
-    private Expression right;
-    private String operator;
+    private final Expression left;
+    private final Expression right;
+    private final String operator;
 
     public LogicExpression(String operator, Expression left, Expression right) {
         this.left = left;

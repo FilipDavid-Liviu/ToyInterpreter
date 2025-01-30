@@ -5,8 +5,8 @@ import model.types.ReferenceType;
 import model.types.Type;
 
 public class ReferenceValue implements Value{
-    private int address;
-    private Type locationType;
+    private final int address;
+    private final Type locationType;
 
     public ReferenceValue(int address, Type locationType){
         this.address = address;

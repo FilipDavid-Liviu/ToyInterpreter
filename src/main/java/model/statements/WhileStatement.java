@@ -10,8 +10,8 @@ import model.values.BooleanValue;
 import model.values.Value;
 
 public class WhileStatement implements Statement {
-    private Expression condition;
-    private Statement body;
+    private final Expression condition;
+    private final Statement body;
 
     public WhileStatement(Expression condition, Statement body) {
         this.condition = condition;

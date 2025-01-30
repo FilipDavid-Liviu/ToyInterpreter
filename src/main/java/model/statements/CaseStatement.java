@@ -5,8 +5,8 @@ import model.dt.TypeDictionary;
 import model.expressions.Expression;
 
 public class CaseStatement implements Statement {
-    private Expression expression;
-    private Statement statement;
+    private final Expression expression;
+    private final Statement statement;
 
     public CaseStatement(Expression expression, Statement statement) {
         this.expression = expression;

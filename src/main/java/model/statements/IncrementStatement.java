@@ -10,7 +10,7 @@ import model.values.IntegerValue;
 import model.values.Value;
 
 public class IncrementStatement implements Statement{
-    private String id;
+    private final String id;
     private Boolean decrement = false;
 
     public IncrementStatement(String id) {

@@ -6,7 +6,7 @@ import model.types.IntegerType;
 import model.types.Type;
 
 public class IntegerValue implements Value{
-    private int value;
+    private final int value;
 
     public IntegerValue(int val) {
         this.value = val;

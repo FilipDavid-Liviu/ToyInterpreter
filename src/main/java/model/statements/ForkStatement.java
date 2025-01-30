@@ -5,7 +5,7 @@ import model.dt.ExecutionStack;
 import model.dt.TypeDictionary;
 
 public class ForkStatement implements Statement {
-    private Statement statement;
+    private final Statement statement;
 
     public ForkStatement(Statement statement) {
         this.statement = statement;

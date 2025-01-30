@@ -7,8 +7,8 @@ import model.types.Type;
 import model.values.Value;
 
 public class SwapStatement implements Statement{
-    private String id1;
-    private String id2;
+    private final String id1;
+    private final String id2;
 
     public SwapStatement(String id1, String id2) {
         this.id1 = id1;

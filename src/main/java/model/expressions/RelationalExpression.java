@@ -12,9 +12,9 @@ import model.values.IntegerValue;
 import model.values.Value;
 
 public class RelationalExpression implements Expression{
-    private Expression left;
-    private Expression right;
-    private String operator;
+    private final Expression left;
+    private final Expression right;
+    private final String operator;
 
     public RelationalExpression(String operator, Expression left, Expression right) {
         this.left = left;

@@ -5,7 +5,7 @@ import model.types.BooleanType;
 import model.types.Type;
 
 public class BooleanValue implements Value {
-    private boolean value;
+    private final boolean value;
 
     public BooleanValue(boolean val) {
         this.value = val;

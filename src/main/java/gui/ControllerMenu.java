@@ -126,7 +126,10 @@ public class ControllerMenu implements Initializable {
                 new PrintStatement(new VariableExpression("v"))));
 
         Statement ex18 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new ForStatement("a", new ValueExpression(new IntegerValue(0)), new ValueExpression(new IntegerValue(3)), new BinaryExpression("+", new VariableExpression("a"), new ValueExpression(new IntegerValue(1))), new PrintStatement(new VariableExpression("v"))), new PrintStatement(new VariableExpression("a"))));
-
+        //int v; v=2; switch(v) case(0) print(v+5); case(1) print(v+10); default print(v);
+        Statement ex19 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(1))),
+                new SwitchStatement(new VariableExpression("v"), new ValueExpression(new IntegerValue(0)), new PrintStatement(new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(5)))),
+                        new ValueExpression(new IntegerValue(1)), new PrintStatement(new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(10)))), new PrintStatement(new VariableExpression("v")))));
 
         examples.add(ex1);
         examples.add(ex2);
@@ -146,6 +149,7 @@ public class ControllerMenu implements Initializable {
         examples.add(ex16);
         examples.add(ex17);
         examples.add(ex18);
+        examples.add(ex19);
 
     }
 

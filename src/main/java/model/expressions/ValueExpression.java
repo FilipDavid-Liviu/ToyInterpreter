@@ -7,7 +7,7 @@ import model.types.Type;
 import model.values.Value;
 
 public class ValueExpression implements Expression {
-    private Value value;
+    private final Value value;
 
     public ValueExpression(Value value) {
         this.value = value;

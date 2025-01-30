@@ -5,7 +5,7 @@ import model.dt.TypeDictionary;
 
 public class CompoundStatement implements Statement {
 
-    private Statement first, second;
+    private final Statement first, second;
 
     public CompoundStatement(Statement first, Statement second) {
         this.first = first;

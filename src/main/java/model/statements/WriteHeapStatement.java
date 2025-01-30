@@ -13,8 +13,8 @@ import model.values.ReferenceValue;
 import model.values.Value;
 
 public class WriteHeapStatement implements Statement {
-    private String varName;
-    private Expression expression;
+    private final String varName;
+    private final Expression expression;
 
     public WriteHeapStatement(String varName, Expression expression) {
         this.varName = varName;

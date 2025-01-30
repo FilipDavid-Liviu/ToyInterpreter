@@ -4,7 +4,7 @@ import model.values.ReferenceValue;
 import model.values.Value;
 
 public class ReferenceType implements Type{
-    private Type innerType;
+    private final Type innerType;
 
     public ReferenceType(Type innerType){
         this.innerType = innerType;

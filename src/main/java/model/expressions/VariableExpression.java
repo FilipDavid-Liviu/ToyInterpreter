@@ -7,7 +7,7 @@ import model.types.Type;
 import model.values.Value;
 
 public class VariableExpression implements Expression {
-    private String variable;
+    private final String variable;
 
     public VariableExpression(String variable) {
         this.variable = variable;

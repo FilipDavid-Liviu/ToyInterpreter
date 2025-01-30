@@ -11,10 +11,10 @@ import model.values.BooleanValue;
 import model.values.Value;
 
 public class ConditionalAssignmentStatement implements Statement{
-    private String id;
-    private Expression condition;
-    private Expression thenE;
-    private Expression elseE;
+    private final String id;
+    private final Expression condition;
+    private final Expression thenE;
+    private final Expression elseE;
 
     public ConditionalAssignmentStatement(String id, Expression condition, Expression thenS, Expression elseS) {
         this.id = id;

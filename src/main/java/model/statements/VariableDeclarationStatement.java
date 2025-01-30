@@ -8,7 +8,7 @@ import model.types.Type;
 
 public class VariableDeclarationStatement implements Statement {
 
-    private String id;
+    private final String id;
     Type type;
 
     public VariableDeclarationStatement(String id, Type type) {

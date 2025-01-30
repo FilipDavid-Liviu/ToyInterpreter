@@ -9,7 +9,7 @@ public class ProgramState {
     private static synchronized int generateId() {
         return nextId++;
     }
-    private int id;
+    private final int id;
     private IExecutionStack execStack;
     private ISymbolTable symbolTable;
     private IOutput output;

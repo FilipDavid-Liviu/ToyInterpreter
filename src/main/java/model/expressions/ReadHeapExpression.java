@@ -11,7 +11,7 @@ import model.values.ReferenceValue;
 import model.values.Value;
 
 public class ReadHeapExpression implements Expression{
-    private Expression expression;
+    private final Expression expression;
 
     public ReadHeapExpression(Expression expression) {
         this.expression = expression;

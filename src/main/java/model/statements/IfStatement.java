@@ -11,9 +11,9 @@ import model.values.BooleanValue;
 import model.values.Value;
 
 public class IfStatement implements Statement {
-    private Expression condition;
-    private Statement thenS;
-    private Statement elseS;
+    private final Expression condition;
+    private final Statement thenS;
+    private final Statement elseS;
 
     public IfStatement(Expression condition, Statement thenS, Statement elseS) {
         this.condition = condition;
