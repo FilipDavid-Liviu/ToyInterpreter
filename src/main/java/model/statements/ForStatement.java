@@ -40,7 +40,7 @@ public class ForStatement implements Statement{
 
     @Override
     public String toString() {
-        return "for(" + id + " = " + exp1 + "; " + id + " < " + exp2 + "; " + id + " = " + exp3 + ")" + statement;
+        return "for(" + id + " = " + exp1 + "; " + id + " < " + exp2 + "; " + id + " = " + exp3 + ") {" + statement + "}";
     }
 
     @Override
