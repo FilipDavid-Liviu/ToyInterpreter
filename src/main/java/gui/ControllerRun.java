@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.ProgramState;
 import model.adt.KeyValuePair;
+import model.adt.KeyValueTuple;
 import model.statements.Statement;
 
 
@@ -31,9 +32,11 @@ public class ControllerRun {
     public TableView<KeyValuePair> heapTableView;
     public TableView<KeyValuePair> symbolTableView;
     public Button exitButton;
-    public TableColumn<KeyValuePair, String> semaphoreIdColumn;
-    public TableColumn<KeyValuePair, String> semaphorePermitsColumn;
-    public TableView<KeyValuePair> semaphoreTableView;
+
+    public TableColumn<KeyValueTuple, String> semaphoreIdColumn;
+    public TableColumn<KeyValueTuple, String> semaphoreSizeColumn;
+    public TableColumn<KeyValueTuple, String> semaphorePermitsColumn;
+    public TableView<KeyValueTuple> semaphoreTableView;
 
 
     private Controller controller;
@@ -55,9 +58,10 @@ public class ControllerRun {
         heapValueColumn.setCellFactory(this::createWrappingCellFactory);
 
         semaphoreIdColumn.setCellValueFactory(new PropertyValueFactory<>("key"));
-        semaphorePermitsColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
-        semaphoreIdColumn.setCellFactory(this::createWrappingCellFactory);
-        semaphorePermitsColumn.setCellFactory(this::createWrappingCellFactory);
+        semaphoreSizeColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        semaphorePermitsColumn.setCellValueFactory(new PropertyValueFactory<>("value2"));
+        semaphoreIdColumn.setCellFactory(this::createWrappingCellFactoryTuple);
+        semaphorePermitsColumn.setCellFactory(this::createWrappingCellFactoryTuple);
 
         idsListView.getSelectionModel().selectedItemProperty().addListener(((_, _, _) -> {
             currentId = idsListView.getSelectionModel().getSelectedItem();
@@ -112,10 +116,10 @@ public class ControllerRun {
                         .toList());
         heapTableView.setItems(heapItems);
 
-        ObservableList<KeyValuePair> semaphoreItems = FXCollections.observableArrayList(
+        ObservableList<KeyValueTuple> semaphoreItems = FXCollections.observableArrayList(
                 commonProgram.getSemaphoreTable().getData().getKeys()
                         .stream()
-                        .map(e -> new KeyValuePair(String.valueOf(e), commonProgram.getSemaphoreTable().getData().lookUp(e).toString()))
+                        .map(e -> new KeyValueTuple(String.valueOf(e), commonProgram.getSemaphoreTable().getData().lookUp(e).getFirst().toString(), commonProgram.getSemaphoreTable().getData().lookUp(e).getSecond().toString()))
                         .toList());
         semaphoreTableView.setItems(semaphoreItems);
 
@@ -123,6 +127,27 @@ public class ControllerRun {
     }
 
     private TableCell<KeyValuePair, String> createWrappingCellFactory(TableColumn<KeyValuePair, String> column) {
+        return new TableCell<>() {
+            private final Text text = new Text();
+
+            {
+                text.wrappingWidthProperty().bind(column.widthProperty());
+                setGraphic(text);
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    text.setText(null);
+                } else {
+                    text.setText(item);
+                }
+            }
+        };
+    }
+
+    private TableCell<KeyValueTuple, String> createWrappingCellFactoryTuple(TableColumn<KeyValueTuple, String> column) {
         return new TableCell<>() {
             private final Text text = new Text();
 
