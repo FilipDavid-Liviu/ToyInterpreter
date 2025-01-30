@@ -10,7 +10,7 @@ import model.types.Type;
 import model.values.Value;
 
 public class AssignStatement implements Statement {
-    private String id;
+    private final String id;
     Expression expression;
 
     public AssignStatement(String id, Expression expression) {
