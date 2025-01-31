@@ -1,4 +1,4 @@
-module com.example.toylanguage {
+module toylanguage {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
@@ -8,4 +8,6 @@ module com.example.toylanguage {
     exports gui;
     exports model.adt;
     opens model.adt to javafx.fxml;
+    exports gui.helpers;
+    opens gui.helpers to javafx.fxml;
 }

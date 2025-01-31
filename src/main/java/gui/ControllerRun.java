@@ -10,8 +10,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.ProgramState;
-import model.adt.KeyValuePair;
-import model.adt.KeyValueTuple;
+import gui.helpers.KeyValuePair;
+import gui.helpers.KeyValueTuple;
 import model.statements.Statement;
 
 

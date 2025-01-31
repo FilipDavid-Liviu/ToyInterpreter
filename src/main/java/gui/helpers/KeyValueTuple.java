@@ -1,4 +1,4 @@
-package model.adt;
+package gui.helpers;
 
 public class KeyValueTuple {
     private final String key;
