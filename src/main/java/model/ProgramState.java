@@ -16,6 +16,7 @@ public class ProgramState {
     private IFileTable fileTable;
     private IHeap heap;
     private ISemaphoreTable semaphoreTable;
+    //private ILockTable lockTable;
 
     public int getId() {
         return id;
@@ -45,6 +46,10 @@ public class ProgramState {
         return semaphoreTable;
     }
 
+//    public ILockTable getLockTable() {
+//        return lockTable;
+//    }
+
 
     public ProgramState(IExecutionStack execStack, ISymbolTable symbolTable, IHeap heap, IOutput output, IFileTable fileTable, Statement program) {
         this.id = generateId();
@@ -54,6 +59,7 @@ public class ProgramState {
         this.output = output;
         this.fileTable = fileTable;
         this.semaphoreTable = new SemaphoreTable();
+        //this.lockTable = new LockTable();
         this.execStack.push(program);
     }
 
@@ -67,6 +73,18 @@ public class ProgramState {
         this.semaphoreTable = semaphoreTable;
         this.execStack.push(program);
     }
+
+//    public ProgramState(IExecutionStack execStack, ISymbolTable symbolTable, IHeap heap, IOutput output, IFileTable fileTable, ISemaphoreTable semaphoreTable, ILockTable lockTable, Statement program) {
+//        this.id = generateId();
+//        this.execStack = execStack;
+//        this.symbolTable = symbolTable;
+//        this.heap = heap;
+//        this.output = output;
+//        this.fileTable = fileTable;
+//        this.semaphoreTable = semaphoreTable;
+//        this.lockTable = lockTable;
+//        this.execStack.push(program);
+//    }
 
     @Override
     public String toString() {

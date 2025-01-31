@@ -1,71 +1,64 @@
-package model.statements.semaphore;
+package model.statements.lock;
 
 import model.ProgramState;
-import model.adt.Pair;
-import model.dt.ISemaphoreTable;
+import model.dt.ILockTable;
 import model.dt.ISymbolTable;
 import model.dt.TypeDictionary;
-import model.exceptions.SemaphoreException;
+import model.exceptions.LockException;
 import model.statements.Statement;
 import model.types.IntegerType;
 import model.values.IntegerValue;
 
-import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ReleaseStatement implements Statement {
+public class UnlockStatement implements Statement {
     private final String id;
     private static final Lock lock = new ReentrantLock();
 
-    public ReleaseStatement(String id) {
+    public UnlockStatement(String id) {
         this.id = id;
     }
 
     @Override
     public ProgramState execute(ProgramState state) {
         lock.lock();
-        ISemaphoreTable semaphoreTable = state.getSemaphoreTable();
+        //ILockTable lockTable = state.getLockTable();
         ISymbolTable symbolTable = state.getSymbolTable();
         if (!symbolTable.isDefined(this.id)){
             lock.unlock();
-            throw new SemaphoreException(2, this.id);
+            throw new LockException(2, this.id);
         }
         if (!symbolTable.lookUp(this.id).getType().equals(new IntegerType())) {
             lock.unlock();
-            throw new SemaphoreException(1, this.id);
+            throw new LockException(1, this.id);
         }
         Integer address = ((IntegerValue)symbolTable.lookUp(this.id)).getValue();
-        if (!semaphoreTable.isDefined(address)) {
-            lock.unlock();
-            throw new SemaphoreException(4, address.toString());
-        }
-        Pair<Integer, List<Integer>> pair = semaphoreTable.lookUp(address);
-        List<Integer> list = pair.getSecond();
-        if (!list.contains(state.getId())) {
-            lock.unlock();
-            //throw new SemaphoreException(2, this.id, state.getId());
-            return null;
-        }
-        else semaphoreTable.release(address, state.getId());
+//        if (!lockTable.isDefined(address)) {
+//            lock.unlock();
+//            throw new LockException(4, address.toString());
+//        }
+//        Integer locked = lockTable.lookUp(address);
+//        if (locked == state.getId())
+//            lockTable.unlock(address, state.getId());
         lock.unlock();
         return null;
     }
 
     @Override
     public Statement deepCopy() {
-        return new ReleaseStatement(this.id);
+        return new UnlockStatement(this.id);
     }
 
     @Override
     public String toString() {
-        return "release(" + this.id + ")";
+        return "unlock(" + this.id + ")";
     }
 
     @Override
     public TypeDictionary typeCheck(TypeDictionary typeDictionary) {
         if (!typeDictionary.lookUp(this.id).equals(new IntegerType())) {
-            throw new SemaphoreException(1, this.id);
+            throw new LockException(1, this.id);
         }
         return typeDictionary;
     }

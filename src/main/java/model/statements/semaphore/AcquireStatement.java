@@ -3,9 +3,12 @@ package model.statements.semaphore;
 import model.ProgramState;
 import model.adt.Pair;
 import model.dt.ISemaphoreTable;
+import model.dt.ISymbolTable;
 import model.dt.TypeDictionary;
 import model.exceptions.SemaphoreException;
 import model.statements.Statement;
+import model.types.IntegerType;
+import model.values.IntegerValue;
 
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -23,19 +26,30 @@ public class AcquireStatement implements Statement {
     public ProgramState execute(ProgramState state) {
         lock.lock();
         ISemaphoreTable semaphoreTable = state.getSemaphoreTable();
-        if (!semaphoreTable.isDefined(this.id)){
+        ISymbolTable symbolTable = state.getSymbolTable();
+        if (!symbolTable.isDefined(this.id)){
             lock.unlock();
             throw new SemaphoreException(2, this.id);
         }
-        Pair<Integer, List<Integer>> pair = semaphoreTable.lookUp(this.id);
+        if (!symbolTable.lookUp(this.id).getType().equals(new IntegerType())) {
+            lock.unlock();
+            throw new SemaphoreException(1, this.id);
+        }
+        Integer address = ((IntegerValue)symbolTable.lookUp(this.id)).getValue();
+        if (!semaphoreTable.isDefined(address)) {
+            lock.unlock();
+            throw new SemaphoreException(4, address.toString());
+        }
+        Pair<Integer, List<Integer>> pair = semaphoreTable.lookUp(address);
         List<Integer> list = pair.getSecond();
         if (list.contains(state.getId())) {
             lock.unlock();
-            throw new SemaphoreException(1, this.id, state.getId());
+            //throw new SemaphoreException(1, this.id, state.getId());
+            return null;
         }
         else {
             if (pair.getFirst() > list.size()) {
-                semaphoreTable.acquire(this.id, state.getId());
+                semaphoreTable.acquire(address, state.getId());
             } else {
                 state.getExecutionStack().push(this);
             }
@@ -56,6 +70,9 @@ public class AcquireStatement implements Statement {
 
     @Override
     public TypeDictionary typeCheck(TypeDictionary typeDictionary) {
+        if (!typeDictionary.lookUp(this.id).equals(new IntegerType())) {
+            throw new SemaphoreException(1, this.id);
+        }
         return typeDictionary;
     }
 }
