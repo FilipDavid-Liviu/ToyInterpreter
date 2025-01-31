@@ -13,9 +13,15 @@ public class MyStack<T> implements IMyStack<T> {
     }
 
     @Override
-    public T pop() throws StackEmptyException {
+    public T pop() {
         if (this.isEmpty()) throw new StackEmptyException();
         return this.stack.pop();
+    }
+
+    @Override
+    public T top() {
+        if (this.isEmpty()) throw new StackEmptyException();
+        return this.stack.peek();
     }
 
     @Override
@@ -59,5 +65,14 @@ public class MyStack<T> implements IMyStack<T> {
     @Override
     public Iterable<T> getAllRev() {
         return this.getStackReversed();
+    }
+
+    @Override
+    public IMyStack<T> deepCopy() {
+        IMyStack<T> newStack = new MyStack<>();
+        for (T elem : this.stack) {
+            newStack.push(elem);
+        }
+        return newStack;
     }
 }

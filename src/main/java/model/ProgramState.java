@@ -1,5 +1,7 @@
 package model;
 
+import model.adt.IMyStack;
+import model.adt.MyStack;
 import model.dt.*;
 import model.exceptions.StackEmptyException;
 import model.statements.*;
@@ -16,7 +18,9 @@ public class ProgramState {
     private IFileTable fileTable;
     private IHeap heap;
     private ISemaphoreTable semaphoreTable;
-    //private ILockTable lockTable;
+    private ILockTable lockTable;
+    private IMyStack<ISymbolTable> symbolTableStack;
+    private IProcedureTable procedureTable;
 
     public int getId() {
         return id;
@@ -46,9 +50,9 @@ public class ProgramState {
         return semaphoreTable;
     }
 
-//    public ILockTable getLockTable() {
-//        return lockTable;
-//    }
+    public ILockTable getLockTable() {
+        return lockTable;
+    }
 
 
     public ProgramState(IExecutionStack execStack, ISymbolTable symbolTable, IHeap heap, IOutput output, IFileTable fileTable, Statement program) {
@@ -74,17 +78,28 @@ public class ProgramState {
         this.execStack.push(program);
     }
 
-//    public ProgramState(IExecutionStack execStack, ISymbolTable symbolTable, IHeap heap, IOutput output, IFileTable fileTable, ISemaphoreTable semaphoreTable, ILockTable lockTable, Statement program) {
-//        this.id = generateId();
-//        this.execStack = execStack;
-//        this.symbolTable = symbolTable;
-//        this.heap = heap;
-//        this.output = output;
-//        this.fileTable = fileTable;
-//        this.semaphoreTable = semaphoreTable;
-//        this.lockTable = lockTable;
-//        this.execStack.push(program);
-//    }
+    public ProgramState(IExecutionStack execStack, IMyStack<ISymbolTable> symbolTableStack, IHeap heap, IOutput output, IFileTable fileTable, IProcedureTable procedureTable, Statement program) {
+        this.id = generateId();
+        this.execStack = execStack;
+        this.symbolTableStack = symbolTableStack;
+        this.heap = heap;
+        this.output = output;
+        this.fileTable = fileTable;
+        this.procedureTable = procedureTable;
+        this.execStack.push(program);
+    }
+
+    public ProgramState(IExecutionStack execStack, IMyStack<ISymbolTable> symbolTableStack, IHeap heap, IOutput output, IFileTable fileTable, ISemaphoreTable semaphoreTable, ILockTable lockTable, Statement program) {
+        this.id = generateId();
+        this.execStack = execStack;
+        this.symbolTableStack = symbolTableStack;
+        this.heap = heap;
+        this.output = output;
+        this.fileTable = fileTable;
+        this.semaphoreTable = semaphoreTable;
+        this.lockTable = lockTable;
+        this.execStack.push(program);
+    }
 
     @Override
     public String toString() {
