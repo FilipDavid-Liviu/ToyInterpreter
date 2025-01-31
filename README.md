@@ -26,10 +26,10 @@ JavaFX was used for the GUI.
   <li> Variable declaration and assignment </li>
   <li> Printing on the console </li>
   <li> If/Switch statements </li>
-  <li> Flow Control Statement: While, DoWhile, For</li>
-  <li> File Handling: opening/closing of a file, reading operations </li>
+  <li> Flow Control Statement: While, DoWhile, ForLoops</li>
+  <li> File Handling: Opening/Closing a file, reading operations </li>
   <li> Heap allocation, reading and writing </li>
-  <li> Concurrency: Fork Statement, Semaphore </li>
+  <li> Concurrency: Fork Statement, Semaphore, Lock </li>
 </ul>
   
 # Functionalities
