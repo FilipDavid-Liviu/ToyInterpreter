@@ -61,6 +61,7 @@ public class ControllerRun {
         semaphoreSizeColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         semaphorePermitsColumn.setCellValueFactory(new PropertyValueFactory<>("value2"));
         semaphoreIdColumn.setCellFactory(this::createWrappingCellFactoryTuple);
+        semaphoreSizeColumn.setCellFactory(this::createWrappingCellFactoryTuple);
         semaphorePermitsColumn.setCellFactory(this::createWrappingCellFactoryTuple);
 
         idsListView.getSelectionModel().selectedItemProperty().addListener(((_, _, _) -> {

@@ -14,12 +14,12 @@ public class ProgramState {
     private final int id;
     private IExecutionStack execStack;
     private ISymbolTable symbolTable;
+    private IMyStack<ISymbolTable> symbolTableStack;
     private IOutput output;
     private IFileTable fileTable;
     private IHeap heap;
     private ISemaphoreTable semaphoreTable;
     private ILockTable lockTable;
-    private IMyStack<ISymbolTable> symbolTableStack;
     private IProcedureTable procedureTable;
 
     public int getId() {
@@ -52,6 +52,14 @@ public class ProgramState {
 
     public ILockTable getLockTable() {
         return lockTable;
+    }
+
+    public IMyStack<ISymbolTable> getSymbolTableStack() {
+        return symbolTableStack;
+    }
+
+    public IProcedureTable getProcedureTable() {
+        return procedureTable;
     }
 
 
@@ -89,13 +97,14 @@ public class ProgramState {
         this.execStack.push(program);
     }
 
-    public ProgramState(IExecutionStack execStack, IMyStack<ISymbolTable> symbolTableStack, IHeap heap, IOutput output, IFileTable fileTable, ISemaphoreTable semaphoreTable, ILockTable lockTable, Statement program) {
+    public ProgramState(IExecutionStack execStack, IMyStack<ISymbolTable> symbolTableStack, IHeap heap, IOutput output, IFileTable fileTable, IProcedureTable procedureTable, ISemaphoreTable semaphoreTable, ILockTable lockTable, Statement program) {
         this.id = generateId();
         this.execStack = execStack;
         this.symbolTableStack = symbolTableStack;
         this.heap = heap;
         this.output = output;
         this.fileTable = fileTable;
+        this.procedureTable = procedureTable;
         this.semaphoreTable = semaphoreTable;
         this.lockTable = lockTable;
         this.execStack.push(program);
