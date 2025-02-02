@@ -71,7 +71,7 @@ public class ProgramState {
         this.output = output;
         this.fileTable = fileTable;
         this.semaphoreTable = new SemaphoreTable();
-        //this.lockTable = new LockTable();
+        this.lockTable = new LockTable();
         this.execStack.push(program);
     }
 

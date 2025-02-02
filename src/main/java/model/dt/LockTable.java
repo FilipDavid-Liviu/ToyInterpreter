@@ -2,12 +2,8 @@ package model.dt;
 
 import model.adt.IMyDictionary;
 import model.adt.MyDictionary;
-import model.adt.Pair;
 import model.exceptions.LockException;
-import model.exceptions.SemaphoreException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 

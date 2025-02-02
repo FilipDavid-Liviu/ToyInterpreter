@@ -25,36 +25,35 @@ public class AcquireStatement implements Statement {
     @Override
     public ProgramState execute(ProgramState state) {
         lock.lock();
-        ISemaphoreTable semaphoreTable = state.getSemaphoreTable();
-        ISymbolTable symbolTable = state.getSymbolTable();
-        if (!symbolTable.isDefined(this.id)){
-            lock.unlock();
-            throw new SemaphoreException(2, this.id);
-        }
-        if (!symbolTable.lookUp(this.id).getType().equals(new IntegerType())) {
-            lock.unlock();
-            throw new SemaphoreException(1, this.id);
-        }
-        Integer address = ((IntegerValue)symbolTable.lookUp(this.id)).getValue();
-        if (!semaphoreTable.isDefined(address)) {
-            lock.unlock();
-            throw new SemaphoreException(4, address.toString());
-        }
-        Pair<Integer, List<Integer>> pair = semaphoreTable.lookUp(address);
-        List<Integer> list = pair.getSecond();
-        if (list.contains(state.getId())) {
-            lock.unlock();
-            //throw new SemaphoreException(1, this.id, state.getId());
-            return null;
-        }
-        else {
-            if (pair.getFirst() > list.size()) {
-                semaphoreTable.acquire(address, state.getId());
+        try {
+            ISemaphoreTable semaphoreTable = state.getSemaphoreTable();
+            ISymbolTable symbolTable = state.getSymbolTable();
+            if (!symbolTable.isDefined(this.id)) {
+                throw new SemaphoreException(2, this.id);
+            }
+            if (!symbolTable.lookUp(this.id).getType().equals(new IntegerType())) {
+                throw new SemaphoreException(1, this.id);
+            }
+            Integer address = ((IntegerValue) symbolTable.lookUp(this.id)).getValue();
+            if (!semaphoreTable.isDefined(address)) {
+                throw new SemaphoreException(4, address.toString());
+            }
+            Pair<Integer, List<Integer>> pair = semaphoreTable.lookUp(address);
+            List<Integer> list = pair.getSecond();
+            if (list.contains(state.getId())) {
+                //throw new SemaphoreException(1, this.id, state.getId());
+                return null;
             } else {
-                state.getExecutionStack().push(this);
+                if (pair.getFirst() > list.size()) {
+                    semaphoreTable.acquire(address, state.getId());
+                } else {
+                    state.getExecutionStack().push(this);
+                }
             }
         }
-        lock.unlock();
+        finally {
+            lock.unlock();
+        }
         return null;
     }
 

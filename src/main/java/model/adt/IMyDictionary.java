@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IMyDictionary<K, V> {
     void put(K key, V value);
-    V lookUp(K key) throws KeyNotFoundMyDictionaryException;
+    V lookUp(K key);
     boolean isDefined(K key);
     void update(K key, V value);
     List<K> getKeys();

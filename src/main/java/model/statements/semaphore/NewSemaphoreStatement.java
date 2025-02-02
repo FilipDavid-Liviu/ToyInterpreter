@@ -25,22 +25,22 @@ public class NewSemaphoreStatement implements Statement {
     @Override
     public ProgramState execute(ProgramState state) {
         lock.lock();
-        Value val = this.value.evaluate(state.getSymbolTable(), state.getHeap());
-        if (!state.getSymbolTable().isDefined(this.id)) {
+        try {
+            Value val = this.value.evaluate(state.getSymbolTable(), state.getHeap());
+            if (!state.getSymbolTable().isDefined(this.id)) {
+                throw new SemaphoreException(2, this.id);
+            }
+            if (!state.getSymbolTable().lookUp(this.id).getType().equals(new IntegerType())) {
+                throw new SemaphoreException(1, this.id);
+            }
+            if (!(val.getType()).equals(new IntegerType())) {
+                throw new SemaphoreException(3, this.id);
+            }
+            state.getSymbolTable().update(this.id, new IntegerValue(state.getSemaphoreTable().getFreeLocation().get()));
+            state.getSemaphoreTable().put(((IntegerValue)(val)).getValue());
+        } finally {
             lock.unlock();
-            throw new SemaphoreException(2, this.id);
         }
-        if (!state.getSymbolTable().lookUp(this.id).getType().equals(new IntegerType())) {
-            lock.unlock();
-            throw new SemaphoreException(1, this.id);
-        }
-        if (!(val.getType()).equals(new IntegerType())) {
-            lock.unlock();
-            throw new SemaphoreException(3, this.id);
-        }
-        state.getSymbolTable().update(this.id, new IntegerValue(state.getSemaphoreTable().getFreeLocation().get()));
-        state.getSemaphoreTable().put(((IntegerValue)(val)).getValue());
-        lock.unlock();
         return null;
     }
 

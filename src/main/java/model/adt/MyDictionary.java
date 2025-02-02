@@ -5,10 +5,9 @@ import model.exceptions.KeyNotFoundMyDictionaryException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 public class MyDictionary<K, V> implements IMyDictionary<K, V>{
-    private ConcurrentMap<K, V> map;
+    private ConcurrentHashMap<K, V> map;
 
     public MyDictionary() {
         this.map = new ConcurrentHashMap<>();
@@ -20,7 +19,7 @@ public class MyDictionary<K, V> implements IMyDictionary<K, V>{
     }
 
     @Override
-    public V lookUp(K key) throws KeyNotFoundMyDictionaryException {
+    public V lookUp(K key) {
         if (!this.isDefined(key)) {
             throw new KeyNotFoundMyDictionaryException(key.toString());
         }

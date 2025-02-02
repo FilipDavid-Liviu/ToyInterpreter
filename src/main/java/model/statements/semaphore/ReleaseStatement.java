@@ -25,30 +25,29 @@ public class ReleaseStatement implements Statement {
     @Override
     public ProgramState execute(ProgramState state) {
         lock.lock();
-        ISemaphoreTable semaphoreTable = state.getSemaphoreTable();
-        ISymbolTable symbolTable = state.getSymbolTable();
-        if (!symbolTable.isDefined(this.id)){
-            lock.unlock();
-            throw new SemaphoreException(2, this.id);
+        try {
+            ISemaphoreTable semaphoreTable = state.getSemaphoreTable();
+            ISymbolTable symbolTable = state.getSymbolTable();
+            if (!symbolTable.isDefined(this.id)) {
+                throw new SemaphoreException(2, this.id);
+            }
+            if (!symbolTable.lookUp(this.id).getType().equals(new IntegerType())) {
+                throw new SemaphoreException(1, this.id);
+            }
+            Integer address = ((IntegerValue) symbolTable.lookUp(this.id)).getValue();
+            if (!semaphoreTable.isDefined(address)) {
+                throw new SemaphoreException(4, address.toString());
+            }
+            Pair<Integer, List<Integer>> pair = semaphoreTable.lookUp(address);
+            List<Integer> list = pair.getSecond();
+            if (!list.contains(state.getId())) {
+                //throw new SemaphoreException(2, this.id, state.getId());
+                return null;
+            } else semaphoreTable.release(address, state.getId());
         }
-        if (!symbolTable.lookUp(this.id).getType().equals(new IntegerType())) {
+        finally {
             lock.unlock();
-            throw new SemaphoreException(1, this.id);
         }
-        Integer address = ((IntegerValue)symbolTable.lookUp(this.id)).getValue();
-        if (!semaphoreTable.isDefined(address)) {
-            lock.unlock();
-            throw new SemaphoreException(4, address.toString());
-        }
-        Pair<Integer, List<Integer>> pair = semaphoreTable.lookUp(address);
-        List<Integer> list = pair.getSecond();
-        if (!list.contains(state.getId())) {
-            lock.unlock();
-            //throw new SemaphoreException(2, this.id, state.getId());
-            return null;
-        }
-        else semaphoreTable.release(address, state.getId());
-        lock.unlock();
         return null;
     }
 
