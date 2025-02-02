@@ -1,6 +1,7 @@
 package model.dt;
 
 import model.adt.IMyDictionary;
+import model.adt.MyDictionary;
 import model.adt.Pair;
 import model.statements.Statement;
 
@@ -9,9 +10,18 @@ import java.util.List;
 public class ProcedureTable implements IProcedureTable {
     IMyDictionary<String, Pair<List<String>, Statement>> table;
 
+    public ProcedureTable() {
+        table = new MyDictionary<>();
+    }
+
     @Override
     public void addProcedure(String name, List<String> params, Statement body) {
-        table.put(name, new Pair<List<String>, Statement>(params, body));
+        table.put(name, new Pair<>(params, body));
+    }
+
+    @Override
+    public boolean isDefined(String name) {
+        return table.isDefined(name);
     }
 
     @Override

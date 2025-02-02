@@ -14,6 +14,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.ProgramState;
+import model.adt.IMyStack;
+import model.adt.MyStack;
 import model.dt.*;
 import model.expressions.*;
 import model.statements.*;
@@ -156,7 +158,10 @@ public class ControllerMenu implements Initializable {
     private static Controller initController(String id, Statement ex){
         IExecutionStack stack = new ExecutionStack();
         IHeap heap = new Heap();
+        IMyStack<ISymbolTable> stackSym = new MyStack<>();
         ISymbolTable symT = new SymbolTable();
+        stackSym.push(symT);
+        IProcedureTable procTable = new ProcedureTable();
         IOutput out = new Output();
         IFileTable fileTable = new FileTable();
         System.out.println("Type checking...");
@@ -172,7 +177,7 @@ public class ControllerMenu implements Initializable {
             alert.showAndWait();
             throw e;
         }
-        ProgramState prg = new ProgramState(stack, symT, heap, out, fileTable, ex);
+        ProgramState prg = new ProgramState(stack, stackSym, heap, out, fileTable, procTable, ex);
         IRepository repo = new Repository("logs/log" + id + ".txt");
         repo.add(prg);
         return new Controller(repo);

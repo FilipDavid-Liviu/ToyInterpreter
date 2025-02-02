@@ -31,7 +31,7 @@ public class ProgramState {
     }
 
     public ISymbolTable getSymbolTable() {
-        return symbolTable;
+        return symbolTableStack.top();
     }
 
     public IHeap getHeap() {
@@ -112,16 +112,16 @@ public class ProgramState {
 
     @Override
     public String toString() {
-        return "ID: " + id + "\n" +this.execStack.toString() + "\n" + this.symbolTable.toString() + "\n" + this.heap.toString() + "\n" +
-                this.output.toString() + "\n" + this.fileTable.toString() + "\n" + this.semaphoreTable.toString() + "\n\n";
+        return "ID: " + id + "\n" +this.execStack.toString() + "\n" + this.symbolTableStack.top().toString() + "\n" + this.heap.toString() + "\n" +
+                this.output.toString() + "\n" + this.fileTable.toString() + "\n" + this.procedureTable.toString() + "\n\n";
     }
 
     public String toStringExecSym() {
-        return "ID: " + id + "\n" +this.execStack.toString() + "\n" + this.symbolTable.toString();
+        return "ID: " + id + "\n" +this.execStack.toString() + "\n" + this.symbolTableStack.top().toString();
     }
 
     public String toStringRest() {
-        return this.heap.toString() + "\n" + this.output.toString() + "\n" + this.fileTable.toString() + "\n" + this.semaphoreTable.toString() + "\n\n";
+        return this.heap.toString() + "\n" + this.output.toString() + "\n" + this.fileTable.toString() + "\n" + this.procedureTable.toString() + "\n\n";
     }
 
     public boolean isNotCompleted() {
