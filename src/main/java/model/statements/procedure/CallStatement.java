@@ -22,22 +22,22 @@ public class CallStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) {
-//        if (!state.getProcedureTable().isDefined(procedureName)) {
-//            throw new ProcedureException(1, procedureName);
-//        }
-//        Pair<List<String>, Statement> procedure = state.getProcedureTable().callProcedure(procedureName);
-//        List<String> params = procedure.getFirst();
-//        if (params.size() != expressions.size()) {
-//            throw new ProcedureException(2, procedureName);
-//        }
-//        ISymbolTable symbolTable = state.getSymbolTableStack().top();
-//        ISymbolTable newSymbolTable = new SymbolTable();
-//        for (int i = 0; i < params.size(); i++) {
-//            newSymbolTable.put(params.get(i), expressions.get(i).evaluate(symbolTable, state.getHeap()));
-//        }
-//        state.getSymbolTableStack().push(newSymbolTable);
-//        state.getExecutionStack().push(new ReturnStatement());
-//        state.getExecutionStack().push(procedure.getSecond());
+        if (!state.getProcedureTable().isDefined(procedureName)) {
+            throw new ProcedureException(1, procedureName);
+        }
+        Pair<List<String>, Statement> procedure = state.getProcedureTable().callProcedure(procedureName);
+        List<String> params = procedure.getFirst();
+        if (params.size() != expressions.size()) {
+            throw new ProcedureException(2, procedureName);
+        }
+        ISymbolTable symbolTable = state.getSymbolTableStack().top();
+        ISymbolTable newSymbolTable = new SymbolTable();
+        for (int i = 0; i < params.size(); i++) {
+            newSymbolTable.put(params.get(i), expressions.get(i).evaluate(symbolTable, state.getHeap()));
+        }
+        state.getSymbolTableStack().push(newSymbolTable);
+        state.getExecutionStack().push(new ReturnStatement());
+        state.getExecutionStack().push(procedure.getSecond());
         return null;
     }
 

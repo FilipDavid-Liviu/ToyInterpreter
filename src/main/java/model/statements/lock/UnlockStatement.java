@@ -22,26 +22,26 @@ public class UnlockStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) {
-//        lock.lock();
-//        try {
-//            ILockTable lockTable = state.getLockTable();
-//            ISymbolTable symbolTable = state.getSymbolTable();
-//            if (!symbolTable.isDefined(this.id)) {
-//                throw new LockException(2, this.id);
-//            }
-//            if (!symbolTable.lookUp(this.id).getType().equals(new IntegerType())) {
-//                throw new LockException(1, this.id);
-//            }
-//            Integer address = ((IntegerValue) symbolTable.lookUp(this.id)).getValue();
-//            if (!lockTable.isDefined(address)) {
-//                throw new LockException(4, address.toString());
-//            }
-//            Integer locked = lockTable.lookUp(address);
-//            if (locked == state.getId())
-//                lockTable.unlock(address, state.getId());
-//        } finally {
-//            lock.unlock();
-//        }
+        lock.lock();
+        try {
+            ILockTable lockTable = state.getLockTable();
+            ISymbolTable symbolTable = state.getSymbolTable();
+            if (!symbolTable.isDefined(this.id)) {
+                throw new LockException(2, this.id);
+            }
+            if (!symbolTable.lookUp(this.id).getType().equals(new IntegerType())) {
+                throw new LockException(1, this.id);
+            }
+            Integer address = ((IntegerValue) symbolTable.lookUp(this.id)).getValue();
+            if (!lockTable.isDefined(address)) {
+                throw new LockException(4, address.toString());
+            }
+            Integer locked = lockTable.lookUp(address);
+            if (locked == state.getId())
+                lockTable.unlock(address, state.getId());
+        } finally {
+            lock.unlock();
+        }
         return null;
     }
 

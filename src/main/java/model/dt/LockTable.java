@@ -39,12 +39,12 @@ public class LockTable implements ILockTable{
         return this.table.isDefined(key);
     }
 
+
     @Override
     public boolean lock(Integer key, Integer id) {
         synchronized (this) {
-            Integer locked = this.table.lookUp(key);
-            if (locked == -1) {
-                locked = id;
+            if (this.table.lookUp(key) == -1) {
+                this.table.update(key, id);
                 return true;
             } else {
                 return false;
@@ -55,9 +55,8 @@ public class LockTable implements ILockTable{
     @Override
     public void unlock(Integer key, Integer id) {
         synchronized (this) {
-            Integer locked = this.table.lookUp(key);
-            if (Objects.equals(locked, id)) {
-                locked = -1;
+            if (Objects.equals(this.table.lookUp(key), id)) {
+                this.table.update(key, -1);
             }
         }
     }
@@ -67,7 +66,7 @@ public class LockTable implements ILockTable{
         StringBuilder result = new StringBuilder();
         result.append("LockTable:");
         for (Integer key : this.table.getKeys()) {
-            result.append("\n   ").append(key.toString()).append(" -> [").append(this.table.lookUp(key).toString()).append("]");
+            result.append("\n   ").append(key.toString()).append(" -> [").append((this.table.lookUp(key)!=-1?this.table.lookUp(key).toString():"null")).append("]");
         }
         return result.toString();
     }

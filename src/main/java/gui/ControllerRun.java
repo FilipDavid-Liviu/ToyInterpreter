@@ -33,10 +33,19 @@ public class ControllerRun {
     public TableView<KeyValuePair> symbolTableView;
     public Button exitButton;
 
+    public TableColumn<KeyValuePair, String> lockIndexColumn;
+    public TableColumn<KeyValuePair, String> lockPermitColumn;
+    public TableView<KeyValuePair> lockTableView;
+
     public TableColumn<KeyValueTuple, String> semaphoreIndexColumn;
     public TableColumn<KeyValueTuple, String> semaphoreSizeColumn;
     public TableColumn<KeyValueTuple, String> semaphorePermitsColumn;
     public TableView<KeyValueTuple> semaphoreTableView;
+
+    public TableColumn<KeyValueTuple, String> procedureNameColumn;
+    public TableColumn<KeyValueTuple, String> procedureParametersColumn;
+    public TableColumn<KeyValueTuple, String> procedureBodyColumn;
+    public TableView<KeyValueTuple> procedureTableView;
 
 
     private Controller controller;
@@ -57,12 +66,24 @@ public class ControllerRun {
         addressColumn.setCellFactory(this::createWrappingCellFactory);
         heapValueColumn.setCellFactory(this::createWrappingCellFactory);
 
+        lockIndexColumn.setCellValueFactory(new PropertyValueFactory<>("key"));
+        lockPermitColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        lockIndexColumn.setCellFactory(this::createWrappingCellFactory);
+        lockPermitColumn.setCellFactory(this::createWrappingCellFactory);
+
         semaphoreIndexColumn.setCellValueFactory(new PropertyValueFactory<>("key"));
         semaphoreSizeColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         semaphorePermitsColumn.setCellValueFactory(new PropertyValueFactory<>("value2"));
         semaphoreIndexColumn.setCellFactory(this::createWrappingCellFactoryTuple);
         semaphoreSizeColumn.setCellFactory(this::createWrappingCellFactoryTuple);
         semaphorePermitsColumn.setCellFactory(this::createWrappingCellFactoryTuple);
+
+        procedureNameColumn.setCellValueFactory(new PropertyValueFactory<>("key"));
+        procedureParametersColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        procedureBodyColumn.setCellValueFactory(new PropertyValueFactory<>("value2"));
+        procedureNameColumn.setCellFactory(this::createWrappingCellFactoryTuple);
+        procedureParametersColumn.setCellFactory(this::createWrappingCellFactoryTuple);
+        procedureBodyColumn.setCellFactory(this::createWrappingCellFactoryTuple);
 
         idsListView.getSelectionModel().selectedItemProperty().addListener(((_, _, _) -> {
             currentId = idsListView.getSelectionModel().getSelectedItem();
@@ -117,12 +138,26 @@ public class ControllerRun {
                         .toList());
         heapTableView.setItems(heapItems);
 
+        ObservableList<KeyValuePair> lockItems = FXCollections.observableArrayList(
+                commonProgram.getLockTable().getData().getKeys()
+                        .stream()
+                        .map(e -> new KeyValuePair(String.valueOf(e), (commonProgram.getLockTable().getData().lookUp(e)!=-1?commonProgram.getLockTable().getData().lookUp(e).toString():"null")))
+                        .toList());
+        lockTableView.setItems(lockItems);
+
         ObservableList<KeyValueTuple> semaphoreItems = FXCollections.observableArrayList(
                 commonProgram.getSemaphoreTable().getData().getKeys()
                         .stream()
                         .map(e -> new KeyValueTuple(String.valueOf(e), commonProgram.getSemaphoreTable().getData().lookUp(e).getFirst().toString(), commonProgram.getSemaphoreTable().getData().lookUp(e).getSecond().toString()))
                         .toList());
         semaphoreTableView.setItems(semaphoreItems);
+
+        ObservableList<KeyValueTuple> procedureItems = FXCollections.observableArrayList(
+                commonProgram.getProcedureTable().getData().getKeys()
+                        .stream()
+                        .map(e -> new KeyValueTuple(String.valueOf(e), commonProgram.getProcedureTable().getData().lookUp(e).getFirst().toString(), commonProgram.getProcedureTable().getData().lookUp(e).getSecond().toString()))
+                        .toList());
+        procedureTableView.setItems(procedureItems);
 
         populateById(currentId);
     }

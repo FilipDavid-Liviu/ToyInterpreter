@@ -1,11 +1,7 @@
 package model.statements;
 
 import model.ProgramState;
-import model.adt.IMyStack;
-import model.adt.MyStack;
 import model.dt.ExecutionStack;
-import model.dt.ISymbolTable;
-import model.dt.SymbolTable;
 import model.dt.TypeDictionary;
 
 public class ForkStatement implements Statement {
@@ -17,8 +13,8 @@ public class ForkStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) {
-        return new ProgramState(new ExecutionStack(), state.getSymbolTable().deepCopy(),
-                state.getHeap(), state.getOutput(), state.getFileTable(), state.getSemaphoreTable(), statement);
+        return new ProgramState(new ExecutionStack(), state.getSymbolTableStack().deepCopy(),
+                state.getHeap(), state.getOutput(), state.getFileTable(), state.getProcedureTable(), state.getLockTable(), state.getSemaphoreTable(), statement);
     }
 
     @Override

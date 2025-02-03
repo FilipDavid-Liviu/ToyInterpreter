@@ -14,9 +14,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.ProgramState;
+import model.adt.IMyStack;
+import model.adt.MyStack;
 import model.dt.*;
 import model.expressions.*;
 import model.statements.*;
+import model.statements.lock.*;
 import model.statements.semaphore.AcquireStatement;
 import model.statements.semaphore.CreateSemaphoreStatement;
 import model.statements.semaphore.ReleaseStatement;
@@ -28,6 +31,7 @@ import repository.Repository;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ControllerMenu implements Initializable {
@@ -66,10 +70,19 @@ public class ControllerMenu implements Initializable {
                 ))
                 )))
         );
-        Statement ext3 = ext2.deepCopy();
-        Statement ext4 = ext2.deepCopy();
-        Statement ext5 = ext2.deepCopy();
-        Statement ext6 = ext2.deepCopy();
+
+        Statement ext2diff = new CompoundStatement(new VariableDeclarationStatement("v1", new ReferenceType(new IntegerType())), new CompoundStatement(
+                new VariableDeclarationStatement("cnt", new IntegerType()), new CompoundStatement(new NewStatement("v1", new ValueExpression(new IntegerValue(1))),
+                new CompoundStatement(new CreateLockStatement("cnt"), new CompoundStatement(
+                        new ForkStatement(new CompoundStatement(new LockStatement("cnt"), new CompoundStatement(new WriteHeapStatement("v1", new ArithmeticExpression("*",
+                                new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntegerValue(10)))), new CompoundStatement(new PrintStatement(new ReadHeapExpression(new VariableExpression("v1"))), new UnlockStatement("cnt"))))), new CompoundStatement(
+                        new ForkStatement(new CompoundStatement(new LockStatement("cnt"), new CompoundStatement(new WriteHeapStatement("v1", new ArithmeticExpression("*",
+                                new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntegerValue(10)))), new CompoundStatement(new WriteHeapStatement("v1", new ArithmeticExpression("*",
+                                new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntegerValue(2)))), new CompoundStatement(new PrintStatement(new ReadHeapExpression(new VariableExpression("v1"))), new UnlockStatement("cnt")))))),
+                        new CompoundStatement(new LockStatement("cnt"), new CompoundStatement(new PrintStatement(new ArithmeticExpression("-", new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntegerValue(1)))), new UnlockStatement("cnt")))
+                ))
+                )))
+        );
 
 //        Statement ex1 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
 //                new PrintStatement(new VariableExpression("v"))));
@@ -146,6 +159,15 @@ public class ControllerMenu implements Initializable {
                                                 new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))), new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1)))),
                                         new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
                                                 new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))), new CompoundStatement(new AcquireStatement("s"), new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))))));
+        Statement ex20 =  new CompoundStatement(new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new VariableDeclarationStatement("s", new IntegerType())), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
+                new CompoundStatement(new CreateLockStatement("s"), new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(3)))),
+                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new LockStatement("s"),
+                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))),
+                                new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(4)))),
+                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new LockStatement("s"),
+                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))), new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1)))),
+                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new LockStatement("s"),
+                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))), new CompoundStatement(new LockStatement("s"), new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))))));
 //        Statement ex17 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new ConditionalAssignmentStatement("v", new BinaryExpression("==", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))), new ValueExpression(new IntegerValue(99)), new ValueExpression(new IntegerValue(77))),
 //                new PrintStatement(new VariableExpression("v"))));
 //
@@ -177,21 +199,34 @@ public class ControllerMenu implements Initializable {
 
         examples.add(ext1);
         examples.add(ext2);
-        examples.add(ext3);
-        examples.add(ext4);
-        examples.add(ext5);
-        examples.add(ext6);
+        examples.add(ext2diff);
         examples.add(ex16);
+        examples.add(ex20);
 
     }
 
-    private static Controller initController(String id, Statement ex){
+    private static Controller initController(String id, Statement ex) {
+        return initController(id, ex, new ProcedureTable());
+    }
+
+    private static Controller initController(String id, Statement ex, ProcedureTable procedureTable){
         IExecutionStack stack = new ExecutionStack();
         IHeap heap = new Heap();
         ISymbolTable symT = new SymbolTable();
-        ISemaphoreTable semaphoreTable = new SemaphoreTable();
+        IMyStack<ISymbolTable> stackSym = new MyStack<>();
+        stackSym.push(symT);
         IOutput out = new Output();
         IFileTable fileTable = new FileTable();
+        ILockTable lockTable = new LockTable();
+        ISemaphoreTable semaphoreTable = new SemaphoreTable();
+//        procedure sum(a,b) v=a+b;print(v)
+//        procedure product(a,b) v=a*b;print(v)
+        procedureTable.addProcedure("sum", new ArrayList<>(List.of("a", "b")), new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()),
+                new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("a"), new VariableExpression("b"))),
+                        new PrintStatement(new VariableExpression("v")))));
+        procedureTable.addProcedure("product", new ArrayList<>(List.of("a", "b")), new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()),
+                new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("*", new VariableExpression("a"), new VariableExpression("b"))),
+                        new PrintStatement(new VariableExpression("v")))));
         System.out.println("Type checking...");
         System.out.println(ex.toString());
         try {
@@ -205,11 +240,13 @@ public class ControllerMenu implements Initializable {
             alert.showAndWait();
             throw e;
         }
-        ProgramState prg = new ProgramState(stack, symT, heap, out, fileTable, semaphoreTable, ex);
+        ProgramState prg = new ProgramState(stack, stackSym, heap, out, fileTable, procedureTable, lockTable, semaphoreTable, ex);
         IRepository repo = new Repository("logs/log" + id + ".txt");
         repo.add(prg);
         return new Controller(repo);
     }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -251,7 +288,7 @@ public class ControllerMenu implements Initializable {
         try {
             Integer id = searchExample(currentExampleText);
             if (id != null) {
-                FXMLLoader fxmlLoader = new FXMLLoader(ToyGUI.class.getResource("run2.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(ToyGUI.class.getResource("run_all.fxml"));
                 Scene scene = new Scene(fxmlLoader.load());
                 scene.getStylesheets().add("file:src/main/styles.css");
                 ControllerRun controllerRun = fxmlLoader.getController();
