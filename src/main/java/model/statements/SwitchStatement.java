@@ -2,10 +2,13 @@ package model.statements;
 
 import model.ProgramState;
 import model.dt.TypeDictionary;
+import model.exceptions.BooleanConditionException;
+import model.exceptions.SwitchException;
 import model.expressions.BinaryExpression;
 import model.expressions.Expression;
 import model.expressions.LogicExpression;
 import model.expressions.RelationalExpression;
+import model.types.BooleanType;
 import model.types.IntegerType;
 
 public class SwitchStatement implements Statement{
@@ -53,8 +56,18 @@ public class SwitchStatement implements Statement{
 
     @Override
     public TypeDictionary typeCheck(TypeDictionary typeDictionary) {
-        Statement ifStatement = new IfStatement(new BinaryExpression("==", this.switchExpression, this.caseExpression1), this.caseStatement1, new IfStatement(new BinaryExpression("==", this.switchExpression, this.caseExpression2), this.caseStatement2, this.defaultStatement));
-        ifStatement.typeCheck(typeDictionary);
+
+        //Statement ifStatement = new IfStatement(new BinaryExpression("==", this.switchExpression, this.caseExpression1), this.caseStatement1, new IfStatement(new BinaryExpression("==", this.switchExpression, this.caseExpression2), this.caseStatement2, this.defaultStatement));
+        //ifStatement.typeCheck(typeDictionary);
+        if (!this.switchExpression.typeCheck(typeDictionary).equals(this.caseExpression1.typeCheck(typeDictionary))) {
+            throw new SwitchException();
+        }
+        if (!this.switchExpression.typeCheck(typeDictionary).equals(this.caseExpression2.typeCheck(typeDictionary))) {
+            throw new SwitchException();
+        }
+        this.caseStatement1.typeCheck(typeDictionary.deepCopy());
+        this.caseStatement2.typeCheck(typeDictionary.deepCopy());
+        this.defaultStatement.typeCheck(typeDictionary.deepCopy());
         return typeDictionary;
     }
 }
