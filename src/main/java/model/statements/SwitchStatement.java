@@ -2,13 +2,11 @@ package model.statements;
 
 import model.ProgramState;
 import model.dt.TypeDictionary;
-import model.exceptions.BooleanConditionException;
 import model.exceptions.SwitchException;
 import model.expressions.BinaryExpression;
 import model.expressions.Expression;
 import model.expressions.LogicExpression;
 import model.expressions.RelationalExpression;
-import model.types.BooleanType;
 import model.types.IntegerType;
 
 public class SwitchStatement implements Statement{
