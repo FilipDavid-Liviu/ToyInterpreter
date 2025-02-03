@@ -21,19 +21,19 @@ public class NewLockStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) {
-        lock.lock();
-        try {
-            if (!state.getSymbolTable().isDefined(this.id)) {
-                throw new LockException(2, this.id);
-            }
-            if (!state.getSymbolTable().lookUp(this.id).getType().equals(new IntegerType())) {
-                throw new LockException(1, this.id);
-            }
-            state.getSymbolTable().update(this.id, new IntegerValue(state.getLockTable().getFreeLocation().get()));
-            state.getLockTable().put();
-        } finally {
-            lock.unlock();
-        }
+//        lock.lock();
+//        try {
+//            if (!state.getSymbolTable().isDefined(this.id)) {
+//                throw new LockException(2, this.id);
+//            }
+//            if (!state.getSymbolTable().lookUp(this.id).getType().equals(new IntegerType())) {
+//                throw new LockException(1, this.id);
+//            }
+//            state.getSymbolTable().update(this.id, new IntegerValue(state.getLockTable().getFreeLocation().get()));
+//            state.getLockTable().put();
+//        } finally {
+//            lock.unlock();
+//        }
         return null;
     }
 

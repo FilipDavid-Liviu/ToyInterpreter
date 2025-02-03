@@ -7,7 +7,7 @@ import model.statements.Statement;
 public class ReturnStatement implements Statement {
     @Override
     public ProgramState execute(ProgramState state) {
-        state.getSymbolTableStack().pop();
+        //state.getSymbolTableStack().pop();
         return null;
     }
 

@@ -17,27 +17,10 @@ import repository.*;
 import view.commands.ExitCommand;
 import view.commands.RunExample;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Interpreter {
 
-    public static void main(String[] args){
-        //v=2;w=5;call sum(v*10,w);print(v);
-        //fork(call product(v,w);
-        //fork(call sum(v,w)))
-        Statement ex1 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new VariableDeclarationStatement("w", new IntegerType()),
-                new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))), new CompoundStatement(new AssignStatement("w", new ValueExpression(new IntegerValue(5))),
-                        new CompoundStatement(new CallStatement("sum", new ArrayList<>(List.of(new ArithmeticExpression("*", new VariableExpression("v"), new ValueExpression(new IntegerValue(10))), new VariableExpression("w")))),
-                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new ForkStatement(new CallStatement("product", new ArrayList<>(List.of(new VariableExpression("v"), new VariableExpression("w"))))),
-                                        new ForkStatement(new CallStatement("sum", new ArrayList<>(List.of(new VariableExpression("v"), new VariableExpression("w"))))))))))));
-        TextMenu menu = new TextMenu();
-        addCommand(menu, "1", ex1);
-        menu.addCommand(new ExitCommand("0", "exit"));
-        menu.show();
-    }
-
-    public static void main3(String[] args) {
+    public static void main(String[] args) {
         Statement ex1 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
                 new PrintStatement(new VariableExpression("v"))));
         //Controller ctr1 = initController("1", ex1);
@@ -188,27 +171,23 @@ public class Interpreter {
     public static void addCommand(TextMenu menu, String id, Statement ex){
         IExecutionStack stack = new ExecutionStack();
         IHeap heap = new Heap();
-        //ISymbolTable symT = new SymbolTable();
-        IMyStack<ISymbolTable> symStack = new MyStack<>();
         ISymbolTable symT = new SymbolTable();
-        symStack.push(symT);
-        IProcedureTable procTable = new ProcedureTable();
         //procedure sum(a,b) v=a+b;print(v)
         //procedure product(a,b) v=a*b;print(v)
-        procTable.addProcedure("sum", new ArrayList<>(List.of("a", "b")), new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()),
-                new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("a"), new VariableExpression("b"))),
-                        new PrintStatement(new VariableExpression("v")))));
-        procTable.addProcedure("product", new ArrayList<>(List.of("a", "b")), new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()),
-                new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("*", new VariableExpression("a"), new VariableExpression("b"))),
-                        new PrintStatement(new VariableExpression("v")))));
-        System.out.println(procTable.toString());
+//        procTable.addProcedure("sum", new ArrayList<>(List.of("a", "b")), new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()),
+//                new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("a"), new VariableExpression("b"))),
+//                        new PrintStatement(new VariableExpression("v")))));
+//        procTable.addProcedure("product", new ArrayList<>(List.of("a", "b")), new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()),
+//                new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("*", new VariableExpression("a"), new VariableExpression("b"))),
+//                        new PrintStatement(new VariableExpression("v")))));
         IOutput out = new Output();
         IFileTable fileTable = new FileTable();
+        ISemaphoreTable semTable = new SemaphoreTable();
         System.out.println("Type checking...");
         System.out.println(id + ":  " + ex.toString());
         try {
             ex.typeCheck(new TypeDictionary());
-            ProgramState prg = new ProgramState(stack, symStack, heap, out, fileTable, procTable, ex);
+            ProgramState prg = new ProgramState(stack, symT, heap, out, fileTable, semTable, ex);
             IRepository repo = new Repository("logs/log" + id + ".txt");
             repo.add(prg);
             Controller ctr = new Controller(repo);
