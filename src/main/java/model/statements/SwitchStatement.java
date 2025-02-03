@@ -4,6 +4,9 @@ import model.ProgramState;
 import model.dt.TypeDictionary;
 import model.expressions.BinaryExpression;
 import model.expressions.Expression;
+import model.expressions.LogicExpression;
+import model.expressions.RelationalExpression;
+import model.types.IntegerType;
 
 public class SwitchStatement implements Statement{
     private final Expression switchExpression;
@@ -24,7 +27,16 @@ public class SwitchStatement implements Statement{
 
     @Override
     public ProgramState execute(ProgramState state) {
-        Statement ifStatement = new IfStatement(new BinaryExpression("==", this.switchExpression, this.caseExpression1), this.caseStatement1, new IfStatement(new BinaryExpression("==", this.switchExpression, this.caseExpression2), this.caseStatement2, this.defaultStatement));
+        Expression cond1, cond2;
+        if (this.switchExpression.evaluate(state.getSymbolTable(), state.getHeap()).getType().equals(new IntegerType())){
+            cond1 = new RelationalExpression("==", this.switchExpression, this.caseExpression1);
+            cond2 = new RelationalExpression("==", this.switchExpression, this.caseExpression2);
+        }
+        else {
+            cond1 = new LogicExpression("==", this.switchExpression, this.caseExpression1);
+            cond2 = new LogicExpression("==", this.switchExpression, this.caseExpression2);
+        }
+        Statement ifStatement = new IfStatement(cond1, this.caseStatement1, new IfStatement(cond2, this.caseStatement2, this.defaultStatement));
         state.getExecutionStack().push(ifStatement);
         return null;
     }

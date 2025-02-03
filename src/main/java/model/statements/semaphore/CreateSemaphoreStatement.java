@@ -12,12 +12,12 @@ import model.values.Value;
 import java.util.concurrent.locks.ReentrantLock;
 
 
-public class NewSemaphoreStatement implements Statement {
+public class CreateSemaphoreStatement implements Statement {
     private final String id;
     private final Expression value;
     private static final ReentrantLock lock = new ReentrantLock();
 
-    public NewSemaphoreStatement(String id, Expression value) {
+    public CreateSemaphoreStatement(String id, Expression value) {
         this.id = id;
         this.value = value;
     }
@@ -46,7 +46,7 @@ public class NewSemaphoreStatement implements Statement {
 
     @Override
     public Statement deepCopy() {
-        return new NewSemaphoreStatement(this.id, this.value);
+        return new CreateSemaphoreStatement(this.id, this.value);
     }
 
     @Override

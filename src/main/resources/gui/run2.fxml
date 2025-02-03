@@ -69,7 +69,7 @@
     </Label>
     <TableView fx:id="semaphoreTableView" layoutX="1066.0" layoutY="265.0" prefHeight="195.0" prefWidth="210.0">
       <columns>
-          <TableColumn fx:id="semaphoreAddressColumn" prefWidth="60.0" text="address" />
+          <TableColumn fx:id="semaphoreIndexColumn" prefWidth="60.0" text="index" />
          <TableColumn fx:id="semaphoreSizeColumn" prefWidth="40.0" text="Size" />
           <TableColumn fx:id="semaphorePermitsColumn" prefWidth="110.0" text="Permits" />
       </columns>

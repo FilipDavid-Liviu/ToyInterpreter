@@ -40,15 +40,15 @@ public class AcquireStatement implements Statement {
             }
             Pair<Integer, List<Integer>> pair = semaphoreTable.lookUp(address);
             List<Integer> list = pair.getSecond();
-            if (list.contains(state.getId())) {
-                //throw new SemaphoreException(1, this.id, state.getId());
-                return null;
-            } else {
-                if (pair.getFirst() > list.size()) {
-                    semaphoreTable.acquire(address, state.getId());
-                } else {
-                    state.getExecutionStack().push(this);
+            if (pair.getFirst() > list.size()) {
+                if (list.contains(state.getId())) {
+                    //throw new SemaphoreException(1, this.id, state.getId());
+                    return null;
                 }
+                else
+                    semaphoreTable.acquire(address, state.getId());
+            } else {
+                state.getExecutionStack().push(this);
             }
         }
         finally {

@@ -14,21 +14,15 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.ProgramState;
-import model.adt.IMyStack;
-import model.adt.MyStack;
 import model.dt.*;
 import model.expressions.*;
 import model.statements.*;
 import model.statements.semaphore.AcquireStatement;
-import model.statements.semaphore.NewSemaphoreStatement;
+import model.statements.semaphore.CreateSemaphoreStatement;
 import model.statements.semaphore.ReleaseStatement;
-import model.types.BooleanType;
 import model.types.IntegerType;
 import model.types.ReferenceType;
-import model.types.StringType;
-import model.values.BooleanValue;
 import model.values.IntegerValue;
-import model.values.StringValue;
 import repository.IRepository;
 import repository.Repository;
 
@@ -62,7 +56,7 @@ public class ControllerMenu implements Initializable {
 
         Statement ext2 = new CompoundStatement(new VariableDeclarationStatement("v1", new ReferenceType(new IntegerType())), new CompoundStatement(
                 new VariableDeclarationStatement("cnt", new IntegerType()), new CompoundStatement(new NewStatement("v1", new ValueExpression(new IntegerValue(1))),
-                new CompoundStatement(new NewSemaphoreStatement("cnt", new ReadHeapExpression(new VariableExpression("v1"))), new CompoundStatement(
+                new CompoundStatement(new CreateSemaphoreStatement("cnt", new ReadHeapExpression(new VariableExpression("v1"))), new CompoundStatement(
                         new ForkStatement(new CompoundStatement(new AcquireStatement("cnt"), new CompoundStatement(new WriteHeapStatement("v1", new ArithmeticExpression("*",
                                 new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntegerValue(10)))), new CompoundStatement(new PrintStatement(new ReadHeapExpression(new VariableExpression("v1"))), new ReleaseStatement("cnt"))))), new CompoundStatement(
                                         new ForkStatement(new CompoundStatement(new AcquireStatement("cnt"), new CompoundStatement(new WriteHeapStatement("v1", new ArithmeticExpression("*",
