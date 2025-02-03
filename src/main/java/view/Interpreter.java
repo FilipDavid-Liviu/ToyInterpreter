@@ -2,14 +2,10 @@ package view;
 
 import controller.Controller;
 import model.ProgramState;
-import model.adt.IMyStack;
-import model.adt.MyStack;
-import model.adt.Pair;
 import model.dt.*;
 import model.exceptions.StackEmptyException;
 import model.expressions.*;
 import model.statements.*;
-import model.statements.procedure.CallStatement;
 import model.statements.semaphore.*;
 import model.types.*;
 import model.values.*;

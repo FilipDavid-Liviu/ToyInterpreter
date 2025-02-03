@@ -33,7 +33,7 @@ public class ControllerRun {
     public TableView<KeyValuePair> symbolTableView;
     public Button exitButton;
 
-    public TableColumn<KeyValueTuple, String> semaphoreIdColumn;
+    public TableColumn<KeyValueTuple, String> semaphoreAddressColumn;
     public TableColumn<KeyValueTuple, String> semaphoreSizeColumn;
     public TableColumn<KeyValueTuple, String> semaphorePermitsColumn;
     public TableView<KeyValueTuple> semaphoreTableView;
@@ -57,10 +57,10 @@ public class ControllerRun {
         addressColumn.setCellFactory(this::createWrappingCellFactory);
         heapValueColumn.setCellFactory(this::createWrappingCellFactory);
 
-        semaphoreIdColumn.setCellValueFactory(new PropertyValueFactory<>("key"));
+        semaphoreAddressColumn.setCellValueFactory(new PropertyValueFactory<>("key"));
         semaphoreSizeColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         semaphorePermitsColumn.setCellValueFactory(new PropertyValueFactory<>("value2"));
-        semaphoreIdColumn.setCellFactory(this::createWrappingCellFactoryTuple);
+        semaphoreAddressColumn.setCellFactory(this::createWrappingCellFactoryTuple);
         semaphoreSizeColumn.setCellFactory(this::createWrappingCellFactoryTuple);
         semaphorePermitsColumn.setCellFactory(this::createWrappingCellFactoryTuple);
 

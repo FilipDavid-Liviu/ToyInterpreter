@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="713.0" prefWidth="1268.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ControllerRun">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="713.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ControllerRun">
     <TextField fx:id="programStatesField" editable="false" layoutX="213.0" layoutY="33.0" prefHeight="30.0" prefWidth="40.0" />
     <Label layoutX="63.0" layoutY="33.0" prefHeight="30.0" prefWidth="145.0" text="Program States:">
         <font>
@@ -67,11 +67,11 @@
             <Font size="14.0" />
         </font>
     </Label>
-    <TableView fx:id="semaphoreTableView" layoutX="1066.0" layoutY="265.0" prefHeight="195.0" prefWidth="180.0">
+    <TableView fx:id="semaphoreTableView" layoutX="1066.0" layoutY="265.0" prefHeight="195.0" prefWidth="210.0">
       <columns>
-          <TableColumn fx:id="semaphoreIdColumn" prefWidth="40.0" text="id" />
+          <TableColumn fx:id="semaphoreAddressColumn" prefWidth="60.0" text="address" />
          <TableColumn fx:id="semaphoreSizeColumn" prefWidth="40.0" text="Size" />
-          <TableColumn fx:id="semaphorePermitsColumn" prefWidth="100.0" text="Permits" />
+          <TableColumn fx:id="semaphorePermitsColumn" prefWidth="110.0" text="Permits" />
       </columns>
     </TableView>
 </AnchorPane>
