@@ -20,6 +20,7 @@ import model.dt.*;
 import model.expressions.*;
 import model.statements.*;
 import model.statements.lock.*;
+import model.statements.procedure.CallStatement;
 import model.statements.semaphore.AcquireStatement;
 import model.statements.semaphore.CreateSemaphoreStatement;
 import model.statements.semaphore.ReleaseStatement;
@@ -83,6 +84,60 @@ public class ControllerMenu implements Initializable {
                 ))
                 )))
         );
+
+        //v=10;
+        //(fork(v=v-1;v=v-1;print(v)); sleep(10);print(v*10)
+        Statement ext3 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(10))),
+                new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("-", new VariableExpression("v"), new ValueExpression(new IntegerValue(1)))),
+                        new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("-", new VariableExpression("v"), new ValueExpression(new IntegerValue(1)))),
+                                new PrintStatement(new VariableExpression("v"))))), new CompoundStatement(new SleepStatement(10),
+                                        new PrintStatement(new ArithmeticExpression("*", new VariableExpression("v"), new ValueExpression(new IntegerValue(10))))))));
+
+        //v=2;w=5;call sum(v*10,w);print(v);
+        //fork(call product(v,w);
+        //fork(call sum(v,w)))
+        Statement ext4 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
+                new CompoundStatement(new VariableDeclarationStatement("w", new IntegerType()), new CompoundStatement(new AssignStatement("w", new ValueExpression(new IntegerValue(5))),
+                        new CompoundStatement(new CallStatement("sum", new ArrayList<>(List.of(new ArithmeticExpression("*", new VariableExpression("v"), new ValueExpression(new IntegerValue(10))), new VariableExpression("w")))),
+                                new CompoundStatement( new PrintStatement(new VariableExpression("v")), new CompoundStatement(new ForkStatement(new CallStatement("product", new ArrayList<>(List.of(new VariableExpression("v"), new VariableExpression("w"))))),
+                                        new ForkStatement(new CallStatement("sum", new ArrayList<>(List.of(new VariableExpression("v"), new VariableExpression("w"))))))))))));
+
+        //Ref int a; new(a,20);
+        //(for(v=0;v<3;v=v+1) fork(print(v);v=v*rh(a)));
+        //print(rh(a))
+        Statement ext5 = new CompoundStatement(new VariableDeclarationStatement("a", new ReferenceType(new IntegerType())), new CompoundStatement(new NewStatement("a", new ValueExpression(new IntegerValue(20))),
+                new CompoundStatement(new ForStatement("v", new ValueExpression(new IntegerValue(0)), new ValueExpression(new IntegerValue(3)), new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))),
+                        new ForkStatement(new CompoundStatement(new PrintStatement(new VariableExpression("v")), new AssignStatement("v", new ArithmeticExpression("*", new VariableExpression("v"), new ReadHeapExpression(new VariableExpression("a"))))))),
+                        new PrintStatement(new ReadHeapExpression(new VariableExpression("a"))))));
+
+        //Ref int v1; Ref int v2; int x; int q;
+        //new(v1,20);new(v2,30);newLock(x);
+        //fork(
+        //fork(
+        //lock(x);wh(v1,rh(v1)-1);unlock(x)
+        //);
+        //lock(x);wh(v1,rh(v1)*10);unlock(x)
+        //);newLock(q);
+        //fork(
+        //fork(lock(q);wh(v2,rh(v2)+5);unlock(q));
+        //lock(q);wh(v2,rh(v2)*10);unlock(q)
+        //);
+        //nop;nop;nop;nop;
+        //lock(x); print(rh(v1)); unlock(x);
+        //lock(q); print(rh(v2)); unlock(q);
+
+        Statement ext6 = new CompoundStatement(new VariableDeclarationStatement("v1", new ReferenceType(new IntegerType())), new CompoundStatement(new VariableDeclarationStatement("v2", new ReferenceType(new IntegerType())),
+                new CompoundStatement(new VariableDeclarationStatement("x", new IntegerType()), new CompoundStatement(new VariableDeclarationStatement("q", new IntegerType()),
+                        new CompoundStatement(new NewStatement("v1", new ValueExpression(new IntegerValue(20))), new CompoundStatement(new NewStatement("v2", new ValueExpression(new IntegerValue(30))),
+                                new CompoundStatement(new CreateLockStatement("x"), new CompoundStatement(new ForkStatement(new CompoundStatement(new ForkStatement(new CompoundStatement(new LockStatement("x"),
+                                        new CompoundStatement(new WriteHeapStatement("v1", new ArithmeticExpression("-", new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntegerValue(1)))),
+                                                new UnlockStatement("x")))), new CompoundStatement(new LockStatement("x"), new CompoundStatement(new WriteHeapStatement("v1", new ArithmeticExpression("*", new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntegerValue(10)))),
+                                                        new UnlockStatement("x"))))), new CompoundStatement(new CreateLockStatement("q"), new CompoundStatement(new ForkStatement(new CompoundStatement(new ForkStatement(new CompoundStatement(new LockStatement("q"),
+                                                        new CompoundStatement(new WriteHeapStatement("v2", new ArithmeticExpression("+", new ReadHeapExpression(new VariableExpression("v2")), new ValueExpression(new IntegerValue(5)))),
+                                                                new UnlockStatement("q")))), new CompoundStatement(new LockStatement("q"), new CompoundStatement(new WriteHeapStatement("v2", new ArithmeticExpression("*", new ReadHeapExpression(new VariableExpression("v2")), new ValueExpression(new IntegerValue(10)))),
+                                                                        new UnlockStatement("q"))))), new CompoundStatement(new NOpStatement(), new CompoundStatement(new NOpStatement(), new CompoundStatement(new NOpStatement(), new CompoundStatement(new NOpStatement(),
+                                                                                new CompoundStatement(new LockStatement("x"), new CompoundStatement(new PrintStatement(new ReadHeapExpression(new VariableExpression("v1"))), new CompoundStatement(new UnlockStatement("x"), new CompoundStatement(new LockStatement("q"),
+                                                                                new CompoundStatement(new PrintStatement(new ReadHeapExpression(new VariableExpression("v2"))), new UnlockStatement("q"))))))))))))))))))));
 
 //        Statement ex1 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
 //                new PrintStatement(new VariableExpression("v"))));
@@ -149,25 +204,25 @@ public class ControllerMenu implements Initializable {
 //                new CompoundStatement(new VariableDeclarationStatement("a", new IntegerType()), new CompoundStatement(new AssignStatement("a", new ValueExpression(new IntegerValue(2))),
 //                        new CompoundStatement(new SwapStatement("v", "a"), new PrintStatement(new VariableExpression("v")))))));
 //
-        Statement ex16 =  new CompoundStatement(new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new VariableDeclarationStatement("s", new IntegerType())), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
-                new CompoundStatement(new CreateSemaphoreStatement("s", new ArithmeticExpression("-", new VariableExpression("v"), new ValueExpression(new IntegerValue(0)))),
-                        new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(3)))),
-                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
-                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))),
-                                new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(4)))),
-                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
-                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))), new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1)))),
-                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
-                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))), new CompoundStatement(new AcquireStatement("s"), new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))))));
-        Statement ex20 =  new CompoundStatement(new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new VariableDeclarationStatement("s", new IntegerType())), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
-                new CompoundStatement(new CreateLockStatement("s"), new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(3)))),
-                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new LockStatement("s"),
-                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))),
-                                new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(4)))),
-                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new LockStatement("s"),
-                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))), new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1)))),
-                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new LockStatement("s"),
-                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))), new CompoundStatement(new LockStatement("s"), new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))))));
+//        Statement ex16 =  new CompoundStatement(new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new VariableDeclarationStatement("s", new IntegerType())), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
+//                new CompoundStatement(new CreateSemaphoreStatement("s", new ArithmeticExpression("-", new VariableExpression("v"), new ValueExpression(new IntegerValue(0)))),
+//                        new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(3)))),
+//                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
+//                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))),
+//                                new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(4)))),
+//                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
+//                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))), new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1)))),
+//                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new AcquireStatement("s"),
+//                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))), new CompoundStatement(new AcquireStatement("s"), new CompoundStatement(new PrintStatement(new VariableExpression("v")), new ReleaseStatement("s")))))))));
+//        Statement ex20 =  new CompoundStatement(new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new VariableDeclarationStatement("s", new IntegerType())), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
+//                new CompoundStatement(new CreateLockStatement("s"), new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(3)))),
+//                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new LockStatement("s"),
+//                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))),
+//                                new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(4)))),
+//                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new LockStatement("s"),
+//                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))), new CompoundStatement(new ForkStatement(new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("v"), new ValueExpression(new IntegerValue(1)))),
+//                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")), new CompoundStatement(new LockStatement("s"),
+//                                                new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))), new CompoundStatement(new LockStatement("s"), new CompoundStatement(new PrintStatement(new VariableExpression("v")), new UnlockStatement("s")))))))));
 //        Statement ex17 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new ConditionalAssignmentStatement("v", new BinaryExpression("==", new VariableExpression("v"), new ValueExpression(new IntegerValue(1))), new ValueExpression(new IntegerValue(99)), new ValueExpression(new IntegerValue(77))),
 //                new PrintStatement(new VariableExpression("v"))));
 //
@@ -200,8 +255,13 @@ public class ControllerMenu implements Initializable {
         examples.add(ext1);
         examples.add(ext2);
         examples.add(ext2diff);
-        examples.add(ex16);
-        examples.add(ex20);
+        examples.add(ext3);
+        examples.add(ext4);
+        examples.add(ext5);
+        examples.add(ext6);
+        examples.add(ext6);
+        examples.add(ext6);
+        examples.add(ext6);
 
     }
 

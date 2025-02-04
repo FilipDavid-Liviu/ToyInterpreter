@@ -1,6 +1,7 @@
 package model;
 
 import model.adt.IMyStack;
+import model.adt.MyStack;
 import model.dt.*;
 import model.exceptions.StackEmptyException;
 import model.statements.*;
@@ -54,6 +55,14 @@ public class ProgramState {
 
     public IMyStack<ISymbolTable> getSymbolTableStack() {
         return symbolTableStack;
+    }
+
+    public IMyStack<ISymbolTable> cloneExecutionStack() {
+        IMyStack<ISymbolTable> newStack = new MyStack<>();
+        for (ISymbolTable elem : this.symbolTableStack.getAllRev()) {
+            newStack.push(elem.deepCopy());
+        }
+        return newStack;
     }
 
     public IProcedureTable getProcedureTable() {

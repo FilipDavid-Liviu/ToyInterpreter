@@ -13,7 +13,7 @@ public class ForkStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) {
-        return new ProgramState(new ExecutionStack(), state.getSymbolTableStack().deepCopy(),
+        return new ProgramState(new ExecutionStack(), state.cloneExecutionStack(),
                 state.getHeap(), state.getOutput(), state.getFileTable(), state.getProcedureTable(), state.getLockTable(), state.getSemaphoreTable(), statement);
     }
 
