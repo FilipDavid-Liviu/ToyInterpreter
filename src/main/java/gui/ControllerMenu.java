@@ -31,9 +31,7 @@ import repository.IRepository;
 import repository.Repository;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ControllerMenu implements Initializable {
     @FXML
@@ -45,7 +43,7 @@ public class ControllerMenu implements Initializable {
 
     private String currentExampleText;
 
-    ArrayList<Statement> examples = new ArrayList<>();
+    Map<Integer, Statement> examples = new HashMap<>();
 
     private void populateList(){
         Statement ext1 = new CompoundStatement(new VariableDeclarationStatement("a", new IntegerType()), new CompoundStatement(
@@ -239,15 +237,11 @@ public class ControllerMenu implements Initializable {
 //        examples.add(ex18);
 //        examples.add(ex19);
 
-//        examples.add(ext1);
-//        examples.add(ext2);
-//        examples.add(ext3);
-//        examples.add(ext4);
-        examples.add(ext5);
-//        examples.add(ext6);
-//        examples.add(ext6);
-//        examples.add(ext6);
-//        examples.add(ext6);
+        examples.put(0, ext5);
+        examples.put(1, ext6);
+        examples.put(2, ext6);
+        examples.put(3, ext6);
+        examples.put(4, ext6);
 
     }
 
@@ -297,8 +291,7 @@ public class ControllerMenu implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         populateList();
-
-        for (Statement example : examples) {
+        for (Statement example : examples.values()) {
             examplesListView.getItems().add(example.toString());
         }
 
@@ -314,9 +307,14 @@ public class ControllerMenu implements Initializable {
     }
 
     private Integer searchExample(String exampleText){
-        for (int i = 0; i < examples.size(); i++) {
-            if (examples.get(i).toString().equals(exampleText)) {
-                return i;
+//        for (int i = 0; i < examples.size(); i++) {
+//            if (examples.get(i).toString().equals(exampleText)) {
+//                return i;
+//            }
+//        }
+        for (Map.Entry<Integer, Statement> entry : examples.entrySet()) {
+            if (entry.getValue().toString().equals(exampleText)) {
+                return entry.getKey();
             }
         }
         return null;
@@ -325,7 +323,7 @@ public class ControllerMenu implements Initializable {
     private void removeExample(Integer id){
         examples.remove((int) id);
         examplesListView.getItems().clear();
-        for (Statement example : examples) {
+        for (Statement example : examples.values()) {
             examplesListView.getItems().add(example.toString());
         }
     }
