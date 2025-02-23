@@ -66,7 +66,8 @@ public class LockTable implements ILockTable{
         StringBuilder result = new StringBuilder();
         result.append("LockTable:");
         for (Integer key : this.table.getKeys()) {
-            result.append("\n   ").append(key.toString()).append(" -> [").append((this.table.lookUp(key)!=-1?this.table.lookUp(key).toString():"null")).append("]");
+            result.append("\n   ").append(key.toString()).append(" -> [").append(-1).append("]");
+            //result.append("\n   ").append(key.toString()).append(" -> [").append((this.table.lookUp(key)!=-1?this.table.lookUp(key).toString():"null")).append("]");
         }
         return result.toString();
     }

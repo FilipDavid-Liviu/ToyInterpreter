@@ -34,7 +34,7 @@ public class LockStatement implements Statement {
             }
             Integer address = ((IntegerValue) symbolTable.lookUp(this.id)).getValue();
             if (!lockTable.isDefined(address)) {
-                throw new LockException(4, address.toString());
+                throw new LockException(3, address.toString());
             }
             Integer locked = lockTable.lookUp(address);
             if (locked == -1) {

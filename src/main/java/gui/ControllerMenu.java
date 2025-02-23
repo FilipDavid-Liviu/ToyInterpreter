@@ -72,19 +72,6 @@ public class ControllerMenu implements Initializable {
                 )))
         );
 
-        Statement ext2diff = new CompoundStatement(new VariableDeclarationStatement("v1", new ReferenceType(new IntegerType())), new CompoundStatement(
-                new VariableDeclarationStatement("cnt", new IntegerType()), new CompoundStatement(new NewStatement("v1", new ValueExpression(new IntegerValue(1))),
-                new CompoundStatement(new CreateLockStatement("cnt"), new CompoundStatement(
-                        new ForkStatement(new CompoundStatement(new LockStatement("cnt"), new CompoundStatement(new WriteHeapStatement("v1", new ArithmeticExpression("*",
-                                new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntegerValue(10)))), new CompoundStatement(new PrintStatement(new ReadHeapExpression(new VariableExpression("v1"))), new UnlockStatement("cnt"))))), new CompoundStatement(
-                        new ForkStatement(new CompoundStatement(new LockStatement("cnt"), new CompoundStatement(new WriteHeapStatement("v1", new ArithmeticExpression("*",
-                                new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntegerValue(10)))), new CompoundStatement(new WriteHeapStatement("v1", new ArithmeticExpression("*",
-                                new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntegerValue(2)))), new CompoundStatement(new PrintStatement(new ReadHeapExpression(new VariableExpression("v1"))), new UnlockStatement("cnt")))))),
-                        new CompoundStatement(new LockStatement("cnt"), new CompoundStatement(new PrintStatement(new ArithmeticExpression("-", new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntegerValue(1)))), new UnlockStatement("cnt")))
-                ))
-                )))
-        );
-
         //v=10;
         //(fork(v=v-1;v=v-1;print(v)); sleep(10);print(v*10)
         Statement ext3 = new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()), new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(10))),
@@ -252,16 +239,15 @@ public class ControllerMenu implements Initializable {
 //        examples.add(ex18);
 //        examples.add(ex19);
 
-        examples.add(ext1);
-        examples.add(ext2);
-        examples.add(ext2diff);
-        examples.add(ext3);
-        examples.add(ext4);
+//        examples.add(ext1);
+//        examples.add(ext2);
+//        examples.add(ext3);
+//        examples.add(ext4);
         examples.add(ext5);
-        examples.add(ext6);
-        examples.add(ext6);
-        examples.add(ext6);
-        examples.add(ext6);
+//        examples.add(ext6);
+//        examples.add(ext6);
+//        examples.add(ext6);
+//        examples.add(ext6);
 
     }
 
@@ -281,12 +267,12 @@ public class ControllerMenu implements Initializable {
         ISemaphoreTable semaphoreTable = new SemaphoreTable();
 //        procedure sum(a,b) v=a+b;print(v)
 //        procedure product(a,b) v=a*b;print(v)
-        procedureTable.addProcedure("sum", new ArrayList<>(List.of("a", "b")), new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()),
-                new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("a"), new VariableExpression("b"))),
-                        new PrintStatement(new VariableExpression("v")))));
-        procedureTable.addProcedure("product", new ArrayList<>(List.of("a", "b")), new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()),
-                new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("*", new VariableExpression("a"), new VariableExpression("b"))),
-                        new PrintStatement(new VariableExpression("v")))));
+//        procedureTable.addProcedure("sum", new ArrayList<>(List.of("a", "b")), new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()),
+//                new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("+", new VariableExpression("a"), new VariableExpression("b"))),
+//                        new PrintStatement(new VariableExpression("v")))));
+//        procedureTable.addProcedure("product", new ArrayList<>(List.of("a", "b")), new CompoundStatement(new VariableDeclarationStatement("v", new IntegerType()),
+//                new CompoundStatement(new AssignStatement("v", new ArithmeticExpression("*", new VariableExpression("a"), new VariableExpression("b"))),
+//                        new PrintStatement(new VariableExpression("v")))));
         System.out.println("Type checking...");
         System.out.println(ex.toString());
         try {
