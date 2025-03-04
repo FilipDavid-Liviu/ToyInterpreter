@@ -1,5 +1,5 @@
 # Toy-Interpreter
-Toy Language Interpreter coded in Java for the Advanced Methods of Programming course during the BBU Computer Science Bachelor's Program.
+Toy Language Interpreter coded in Java.
 JavaFX was used for the GUI.
 
 
